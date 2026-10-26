@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- The injected repository is an intentionally shared storage port.
+       Copying it would defeat constructor injection and database identity. -->
+  <Match>
+    <Class name="de.appfabrik.naehplan.application.ProjectService"/>
+    <Method name="&lt;init&gt;"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+</FindBugsFilter>
