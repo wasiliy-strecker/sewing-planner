@@ -37,10 +37,11 @@ try {
     $Common = @(
         "--name", "NaehPlan", "--app-version", $Version,
         "--vendor", "Wasiliy Strecker", "--description", "NähPlan - Nähprojekte mit Checkliste",
+        "--icon", "$Root\assets\branding\icon.ico",
         "--input", $InputDirectory, "--main-jar", "naehplan-$Version.jar",
         "--main-class", "de.appfabrik.naehplan.Launcher",
         "--module-path", "$env:JAVA_HOME\jmods;$Modules",
-        "--add-modules", "java.se,javafx.controls,jdk.unsupported",
+        "--add-modules", "java.se,javafx.controls,jdk.unsupported,jdk.localedata",
         "--java-options", "--add-modules=javafx.controls",
         "--java-options", "-Dfile.encoding=UTF-8"
     )

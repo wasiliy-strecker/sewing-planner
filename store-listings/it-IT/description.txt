@@ -1,0 +1,7 @@
+NähPlan
+
+Pianifica i progetti di cucito con nome, tessuto o materiale, colore, posizione e note. Una foto facoltativa, tre stati e una lista delle fasi tengono traccia del lavoro.
+
+Aggiungi, rinomina, spunta o rimuovi le fasi. Le modifiche si salvano insieme al progetto. Cerca nei testi del progetto e nelle fasi di lavoro.
+
+La raccolta rimane sul tuo computer. Non servono un account o una connessione Internet. L’interfaccia è disponibile in tedesco, inglese, spagnolo, francese, italiano e portoghese brasiliano. Le modifiche alla lingua si applicano al prossimo avvio.

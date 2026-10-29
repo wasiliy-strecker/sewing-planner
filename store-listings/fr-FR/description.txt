@@ -1,0 +1,7 @@
+NähPlan
+
+Planifiez vos projets de couture avec un nom, un tissu ou une matière, une couleur, un emplacement et des notes. Une photo facultative, trois états et une liste d’étapes permettent de suivre votre travail.
+
+Ajoutez, renommez, cochez ou retirez des étapes. Les modifications sont enregistrées avec le projet. Recherchez dans les textes et les étapes des projets.
+
+Votre collection reste sur votre ordinateur. Aucun compte ni connexion Internet n’est nécessaire. L’interface est disponible en allemand, anglais, espagnol, français, italien et portugais du Brésil. Le changement de langue s’applique au prochain démarrage.

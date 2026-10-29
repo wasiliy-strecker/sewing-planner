@@ -10,7 +10,11 @@ den drei Statuswerten Geplant, Angefangen, Fertig und einer einfachen Checkliste
 Keine weiteren Hauptfunktionen. KostümPlan bleibt die fünfte Reservestufe.
 Java 21, JavaFX 21.0.11, SQLite JDBC, Maven mit Wrapper und ein Maven-Modul.
 Pakete `domain`, `application`, `persistence`, `ui`. Keine gemeinsame Runtime.
-Java-Bezeichner englisch, Oberfläche und Projektdokumentation deutsch.
+Java-Bezeichner und GitHub-Metadaten englisch, Projektdokumentation deutsch.
+Die Oberfläche unterstützt de-DE, en-US, es-ES, fr-FR, it-IT und pt-BR.
+Sämtliche neuen UI-Texte in allen sechs UTF-8-Katalogen ergänzen.
+Sprachwahl gilt ab Neustart. Daten und stabile Status-/Schrittwerte nie übersetzen.
+`docs/internationalization.md` beschreibt isolierte GUI-Prüfungen und Ordnerlieferung.
 
 ## Befehle
 

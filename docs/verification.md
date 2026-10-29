@@ -1,5 +1,33 @@
 # Prüfbericht
 
+## Internationalisierung, 29. Oktober 2026
+
+`./mvnw verify -Dnaehplan.uiTests=true` besteht auf einem eigenen Xvfb-Display
+mit 134 Tests ohne Fehler oder übersprungene Fälle. Compiler-Lint, Enforcer,
+Spotless und SpotBugs bestehen. Ruff, Shell-Syntax und Diff-Prüfung bestehen.
+110 UTF-8-Meldungen je Sprache decken Oberfläche, Checkliste und Fehler ab.
+
+18 echte JavaFX-Prozesse prüfen sechs Sprachen mit 618 Prüfbedingungen.
+Die Checklistenprüfung umfasst leere Schritte, gleiche Texte mit unabhängigen
+UUIDs, Positionslücken, Häkchen, Verwerfen, SQLite-Sperre, Wiederholung und
+unveränderten Neustart. Fotos, Unicode und alle drei Statuswerte bleiben erhalten.
+24 echte Screenshots wurden visuell geprüft. Der Bearbeitungsdialog wird für
+die Aufnahme auf 1040 Pixel vergrößert und zeigt die Checkliste vollständig.
+
+Das eigenständige Linux-Paket startet außerhalb des Projekts ohne `JAVA_HOME`
+und mit `PATH=/nonexistent`. Die eingebettete JVM enthält `jdk.localedata`.
+1234 synthetische Projekte im Bestandsschema prüfen regionale Zahlengruppierung.
+Native JPEG-Auswahl, gemeinsame Speicherung und englischer Neustart erhalten
+Fotobytes, Status sowie Schritt-UUIDs, Häkchen und Positionslücken.
+
+Nachweise: `target/international-ui-verify-v2.log`,
+`target/international-captures-final-v2/`, `target/international-packaged-final-v2/`.
+Die geprüfte Paketlaufzeit liegt in `target/app-image/NaehPlan/`.
+Die Ordnerlieferung bindet Quellen, Paket und Nachweise per Hash an den Commit.
+Windows-Paketabnahme und Store-Einreichung bleiben offen.
+
+## Historischer Erststand
+
 Stand: 26. Oktober 2026, NähPlan 0.1.0.
 
 ## Automatische Prüfungen

@@ -1,0 +1,7 @@
+NähPlan
+
+Planeje projetos de costura com nome, tecido ou material, cor, local e notas. Uma foto opcional, três status e uma lista de etapas ajudam a acompanhar seu trabalho.
+
+Adicione, renomeie, marque ou remova etapas. As alterações são salvas junto com o projeto. Pesquise nos textos e nas etapas dos projetos.
+
+Sua coleção fica no computador. Não é necessário ter conta ou conexão com a Internet. A interface está disponível em alemão, inglês, espanhol, francês, italiano e português do Brasil. A mudança de idioma é aplicada ao iniciar o aplicativo novamente.

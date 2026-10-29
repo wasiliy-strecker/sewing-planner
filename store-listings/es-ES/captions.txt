@@ -1,0 +1,4 @@
+Consulta proyectos con foto, estado y pasos.
+Edita los detalles y los pasos juntos.
+Encuentra proyectos de costura por sus notas.
+Elige el idioma para el próximo inicio.

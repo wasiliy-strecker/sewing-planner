@@ -150,3 +150,12 @@ Native Zielplattformtests, Signierung und Store-Einreichungen stehen noch aus.
 Keine Unteraufgaben, Vorlagen, Abhängigkeiten, Termine, Verantwortlichen,
 manuelle Umsortierung, automatischen Übergänge, PDFs, Cloud oder weitere
 Hauptfunktionen. Es wurde nichts gepusht oder veröffentlicht.
+
+## Sprachen und Store-Vorschau
+
+Die Oberfläche unterstützt Deutsch, Englisch, Spanisch, Französisch, Italienisch
+und brasilianisches Portugiesisch. Unter „Sprache“ wählbar, wirksam ab Neustart.
+Bestehende Daten, Fotos, Status und Checklisten bleiben erhalten.
+[Internationalisierung](docs/internationalization.md) beschreibt sechs Store-Textfassungen,
+echte Bildschirmaufnahmen und geprüfte Vorschauordner ohne Lieferarchive.
+Windows-Abnahme und Veröffentlichung bleiben separat.

@@ -102,32 +102,32 @@ class ProjectServiceTest {
   private static final class FailingRepository implements ProjectRepository {
     @Override
     public void initialize() {
-      throw new StorageException("Testfehler");
+      throw new StorageException(StorageException.Code.OPERATION);
     }
 
     @Override
     public List<Project> findAll() {
-      throw new StorageException("Testfehler");
+      throw new StorageException(StorageException.Code.OPERATION);
     }
 
     @Override
     public de.appfabrik.naehplan.domain.Photo findPhoto(long id) {
-      throw new StorageException("Testfehler");
+      throw new StorageException(StorageException.Code.OPERATION);
     }
 
     @Override
     public Project create(ProjectDraft draft) {
-      throw new StorageException("Testfehler");
+      throw new StorageException(StorageException.Code.OPERATION);
     }
 
     @Override
     public Project update(long id, ProjectDraft draft) {
-      throw new StorageException("Testfehler");
+      throw new StorageException(StorageException.Code.OPERATION);
     }
 
     @Override
     public void delete(long id) {
-      throw new StorageException("Testfehler");
+      throw new StorageException(StorageException.Code.OPERATION);
     }
   }
 }

@@ -143,3 +143,11 @@ Die Entscheidungen wurden mit der offiziellen Dokumentation zu
 [Fremdschlüsseln](https://www.sqlite.org/foreignkeys.html) und
 [JavaFX-Checkboxen](https://openjfx.io/javadoc/21/javafx.controls/javafx/scene/control/CheckBox.html)
 abgeglichen. Ziel sind kleine lokale Sammlungen und eine bearbeitende App-Instanz.
+
+## Internationalisierung
+
+`i18n` hält eine unveränderliche Sprachwahl pro Prozess mit sechs UTF-8-Katalogen.
+Regionale Zahlen und Sortierung folgen dieser Wahl. `LanguagePreferences` speichert
+die Einstellung atomar neben der Datenbank. UI-Fehler verwenden Meldungsschlüssel.
+App-ID, SQLite-Schema und UUIDs bleiben unverändert. Checklisten und Fotos werden
+weiterhin mit den Texten und Statuscodes in einer Transaktion gespeichert.

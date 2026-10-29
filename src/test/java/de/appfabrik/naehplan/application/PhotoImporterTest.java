@@ -77,11 +77,11 @@ class PhotoImporterTest {
   }
 
   @Test
-  void rejectsMissingFilesAndDirectoriesWithReadableMessage() {
+  void rejectsMissingFilesAndDirectoriesWithStableCode() {
     assertThrows(PhotoException.class, () -> PhotoImporter.read(directory));
     PhotoException failure =
         assertThrows(
             PhotoException.class, () -> PhotoImporter.read(directory.resolve("fehlt.png")));
-    assertTrue(failure.getMessage().contains("JPEG"));
+    assertEquals(PhotoException.Code.FILE, failure.code());
   }
 }

@@ -1,0 +1,7 @@
+NähPlan
+
+Plane deine Nähprojekte mit Name, Stoff oder Material, Farbe, Aufbewahrungsort und Notizen. Ein optionales Foto, die drei Statuswerte und eine einfache Checkliste halten deinen Arbeitsstand fest.
+
+Füge Arbeitsschritte hinzu, benenne sie um, hake sie ab oder entferne sie. Änderungen werden gemeinsam mit dem Projekt gespeichert. Die Suche findet Projekttexte und Arbeitsschritte.
+
+Deine Sammlung bleibt auf deinem Computer. Du brauchst weder Konto noch Internetverbindung. Die Oberfläche gibt es auf Deutsch, Englisch, Spanisch, Französisch, Italienisch und Portugiesisch (Brasilien). Ein Sprachwechsel gilt beim nächsten App-Start.

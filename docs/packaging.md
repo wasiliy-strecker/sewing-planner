@@ -103,3 +103,11 @@ Quellen für die später erneut zu prüfenden Vorgaben:
 - [Apple: Distribution und App Sandbox](https://help.apple.com/xcode/mac/current/en.lproj/dev91fe7130a.html)
 - [Microsoft: Store-Überblick](https://learn.microsoft.com/en-us/windows/apps/publish/)
 - [GitHub: Verfügbare Runner](https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job)
+
+## Internationale Vorschau
+
+`jpackage` bündelt `jdk.localedata` für alle sechs Sprachen. Die native
+Paketbezeichnung bleibt `NaehPlan`, der sichtbare Produktname `NähPlan`.
+Eigenes PNG/ICO und sechs UTF-8-Kataloge sind enthalten. Der isolierte
+Pakettest startet ohne Entwicklungs-JDK und prüft Bestandsschema, Foto, Status,
+Schritt-UUIDs und Sprachwechsel. Siehe [Vorschauablauf](internationalization.md).

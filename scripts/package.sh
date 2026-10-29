@@ -48,9 +48,12 @@ common=(--name "$APP_NAME" --app-version "$VERSION" --vendor "Wasiliy Strecker"
   --input "$INPUT" --main-jar "naehplan-$VERSION.jar"
   --main-class de.appfabrik.naehplan.Launcher
   --module-path "$JAVA_HOME/jmods:$MODULES"
-  --add-modules java.se,javafx.controls,jdk.unsupported
+  --add-modules java.se,javafx.controls,jdk.unsupported,jdk.localedata
   --java-options "--add-modules=javafx.controls"
   --java-options "-Dfile.encoding=UTF-8")
+if [[ "$(uname -s)" == Linux ]]; then
+  common+=(--icon "$ROOT/assets/branding/icon-256.png")
+fi
 if [[ "$(uname -s)" == Darwin ]]; then
   common+=(--mac-package-identifier de.appfabrik.naehplan --mac-package-name NaehPlan)
 fi

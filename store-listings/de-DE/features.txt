@@ -1,0 +1,6 @@
+Projektname, Stoff, Farbe, Ort und Notizen
+Ein optionales JPEG- oder PNG-Foto
+Geplant, Angefangen und Fertig
+Checkliste mit eigenen Arbeitsschritten
+Suche in Projekttexten und Schritten
+Lokale Speicherung und sechs Sprachen

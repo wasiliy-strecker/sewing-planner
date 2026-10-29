@@ -6,6 +6,7 @@ import de.appfabrik.naehplan.domain.Photo;
 import de.appfabrik.naehplan.domain.Project;
 import de.appfabrik.naehplan.domain.ProjectDraft;
 import de.appfabrik.naehplan.domain.ProjectStatus;
+import de.appfabrik.naehplan.i18n.Messages;
 import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
@@ -34,6 +35,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 final class ProjectEditor {
+  private final Messages messages;
   private final Stage stage = new Stage();
   private final TextField name = new TextField();
   private final TextField material = new TextField();
@@ -44,11 +46,11 @@ final class ProjectEditor {
   private final Label validation = new Label();
   private final Label error = new Label();
   private final Label progress = new Label();
-  private final Button save = new Button("Speichern");
-  private final Button cancel = new Button("Abbrechen");
-  private final Button choose = new Button("Foto auswählen …");
-  private final Button remove = new Button("Foto entfernen");
-  private final PhotoPreview preview = new PhotoPreview(232, 170);
+  private final Button save = new Button();
+  private final Button cancel = new Button();
+  private final Button choose = new Button();
+  private final Button remove = new Button();
+  private final PhotoPreview preview;
   private final ProjectService service;
   private final AsyncTasks tasks;
   private final Long id;
@@ -64,13 +66,21 @@ final class ProjectEditor {
       Photo existingPhoto,
       ProjectService service,
       AsyncTasks tasks,
-      Consumer<Project> onSaved) {
+      Consumer<Project> onSaved,
+      Messages messages) {
+    this.messages = messages;
+    preview = new PhotoPreview(232, 170, messages);
+    preview.setId("editor-photo");
+    save.setText(messages.text("action.save"));
+    cancel.setText(messages.text("action.cancel"));
+    choose.setText(messages.text("photo.choose"));
+    remove.setText(messages.text("photo.remove"));
     this.service = service;
     this.tasks = tasks;
     this.onSaved = onSaved;
     id = existing == null ? null : existing.id();
     photo = existingPhoto;
-    checklist = new ChecklistEditor(existing == null ? List.of() : existing.steps());
+    checklist = new ChecklistEditor(existing == null ? List.of() : existing.steps(), messages);
     status.getItems().setAll(ProjectStatus.values());
     status.setValue(existing == null ? ProjectStatus.PLANNED : existing.status());
     status.setCellFactory(list -> statusCell());
@@ -87,23 +97,32 @@ final class ProjectEditor {
     original = input();
     stage.initOwner(owner);
     stage.initModality(Modality.WINDOW_MODAL);
-    stage.setTitle(existing == null ? "Projekt hinzufügen" : "Projekt bearbeiten");
+    stage.setTitle(existing == null ? messages.text("project.add") : messages.text("project.edit"));
     stage.setMinWidth(660);
     stage.setMinHeight(540);
     Label heading = new Label(stage.getTitle());
     heading.getStyleClass().add("section-heading");
-    Label hint = new Label("Nur der Projektname ist erforderlich.");
+    Label hint = new Label(messages.text("editor.hint"));
     hint.getStyleClass().add("muted");
+    hint.setWrapText(true);
+    UiSupport.icon(stage);
+    for (var field :
+        new javafx.scene.control.TextInputControl[] {name, material, color, location, note}) {
+      UiSupport.textMenu(field, messages);
+    }
+    validation.setId("name-validation");
+    error.setId("save-error");
+    cancel.setId("cancel-project");
     name.setId("project-name");
     material.setId("project-material");
     color.setId("project-color");
     location.setId("project-location");
     note.setId("project-note");
-    name.setPromptText("Zum Beispiel Tasche für den Alltag");
-    material.setPromptText("Zum Beispiel Leinen oder Baumwolle");
-    color.setPromptText("Zum Beispiel Salbeigrün");
-    location.setPromptText("Zum Beispiel Schrank, Box 2");
-    note.setPromptText("Was möchtest du dir zu diesem Projekt merken?");
+    name.setPromptText(messages.text("editor.namePrompt"));
+    material.setPromptText(messages.text("field.optional"));
+    color.setPromptText(messages.text("editor.colorPrompt"));
+    location.setPromptText(messages.text("editor.locationPrompt"));
+    note.setPromptText(messages.text("editor.notePrompt"));
     note.setWrapText(true);
     note.setPrefRowCount(4);
     for (Label label : new Label[] {validation, error, progress}) {
@@ -134,22 +153,23 @@ final class ProjectEditor {
           updatePhotoButtons();
           error.setVisible(false);
         });
-    Label photoHint =
-        new Label(
-            "Ein JPEG oder PNG. Max. 10 MiB, 6000 Pixel je Seite und 16 Millionen Pixel insgesamt.");
+    Label photoHint = new Label(messages.text("photo.hint"));
     photoHint.setWrapText(true);
+    photoHint.setMinHeight(Region.USE_PREF_SIZE);
     photoHint.setMaxWidth(232);
     photoHint.getStyleClass().add("muted");
-    VBox photoForm = new VBox(10, new Label("Foto · optional"), preview, choose, remove, photoHint);
+    VBox photoForm =
+        new VBox(
+            10, new Label(messages.text("photo.optional")), preview, choose, remove, photoHint);
     VBox fields =
         new VBox(
             12,
-            field("Projektname *", name),
-            field("Status", status),
-            field("Stoff / Material", material),
-            field("Farbe", color),
-            field("Aufbewahrungsort", location),
-            field("Notiz", note));
+            field(messages.text("field.requiredName"), name),
+            field(messages.text("field.status"), status),
+            field(messages.text("field.material"), material),
+            field(messages.text("field.color"), color),
+            field(messages.text("field.location"), location),
+            field(messages.text("field.note"), note));
     fields.setMinWidth(280);
     HBox.setHgrow(fields, Priority.ALWAYS);
     HBox columns = new HBox(24, fields, photoForm);
@@ -187,12 +207,12 @@ final class ProjectEditor {
     updatePhotoButtons();
   }
 
-  private static ListCell<ProjectStatus> statusCell() {
+  private ListCell<ProjectStatus> statusCell() {
     return new ListCell<>() {
       @Override
       protected void updateItem(ProjectStatus value, boolean empty) {
         super.updateItem(value, empty);
-        setText(empty || value == null ? null : value.displayName());
+        setText(empty || value == null ? null : messages.status(value));
       }
     };
   }
@@ -230,17 +250,23 @@ final class ProjectEditor {
       return;
     }
     FileChooser chooser = new FileChooser();
-    chooser.setTitle("Foto auswählen");
+    chooser.setTitle(messages.text("photo.chooserTitle"));
     chooser
         .getExtensionFilters()
         .add(
             new FileChooser.ExtensionFilter(
-                "JPEG- und PNG-Bilder", "*.jpg", "*.jpeg", "*.png", "*.JPG", "*.JPEG", "*.PNG"));
+                messages.text("photo.filter"),
+                "*.jpg",
+                "*.jpeg",
+                "*.png",
+                "*.JPG",
+                "*.JPEG",
+                "*.PNG"));
     File selected = chooser.showOpenDialog(stage);
     if (selected == null) {
       return;
     }
-    setBusy(true, "Foto wird geprüft …");
+    setBusy(true, messages.text("photo.checking"));
     error.setVisible(false);
     tasks.submit(
         () -> {
@@ -276,11 +302,17 @@ final class ProjectEditor {
               current.status(),
               checklist.validatedSteps());
     } catch (IllegalArgumentException exception) {
-      validation.setText(exception.getMessage());
+      validation.setText(
+          messages.text(
+              name.getText()
+                      .codePoints()
+                      .noneMatch(c -> !Character.isWhitespace(c) && !Character.isSpaceChar(c))
+                  ? "validation.name"
+                  : "validation.steps"));
       validation.setVisible(true);
       return;
     }
-    setBusy(true, "Wird gespeichert …");
+    setBusy(true, messages.text("save.busy"));
     error.setVisible(false);
     validation.setVisible(false);
     tasks.submit(
@@ -297,7 +329,7 @@ final class ProjectEditor {
   }
 
   private void showError(Throwable failure) {
-    error.setText(UiSupport.message(failure));
+    error.setText(UiSupport.message(failure, messages));
     error.setVisible(true);
   }
 
@@ -319,7 +351,7 @@ final class ProjectEditor {
 
   private void updatePhotoButtons() {
     choose.setDisable(busy);
-    choose.setText(photo == null ? "Foto auswählen …" : "Foto ersetzen …");
+    choose.setText(photo == null ? messages.text("photo.choose") : messages.text("photo.replace"));
     remove.setDisable(busy || photo == null);
   }
 
@@ -330,10 +362,10 @@ final class ProjectEditor {
     if (input().equals(original)
         || UiSupport.confirm(
             stage,
-            "Änderungen verwerfen?",
-            "Deine ungespeicherten Texte, Foto-, Status- und Checklistenänderungen gehen beim Verwerfen verloren.",
-            "Verwerfen",
-            "Weiterbearbeiten")) {
+            messages.text("discard.title"),
+            messages.text("discard.detail"),
+            messages.text("action.discard"),
+            messages.text("action.keep"))) {
       stage.hide();
     }
   }

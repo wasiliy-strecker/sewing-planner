@@ -1,6 +1,7 @@
 package de.appfabrik.naehplan.ui;
 
 import de.appfabrik.naehplan.domain.ChecklistStep;
+import de.appfabrik.naehplan.i18n.Messages;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,22 +18,23 @@ import javafx.scene.layout.VBox;
 final class ChecklistEditor extends VBox {
   private final List<StepRow> rows = new ArrayList<>();
   private final VBox list = new VBox(8);
-  private final Label empty =
-      new Label("Noch keine Arbeitsschritte. Eine leere Checkliste ist in Ordnung.");
+  private final Label empty = new Label();
+  private final Messages messages;
 
-  ChecklistEditor(List<ChecklistStep> steps) {
+  ChecklistEditor(List<ChecklistStep> steps, Messages messages) {
     super(10);
+    this.messages = messages;
+    empty.setText(messages.text("checklist.empty"));
     setId("checklist-editor");
-    Label heading = new Label("Arbeitsschritte");
+    Label heading = new Label(messages.text("checklist.heading"));
     heading.getStyleClass().add("field-label");
-    Label hint =
-        new Label(
-            "Abhaken und Bearbeiten werden erst mit „Speichern“ übernommen. Der Projektstatus bleibt unabhängig.");
+    Label hint = new Label(messages.text("checklist.hint"));
+    heading.setWrapText(true);
     hint.setWrapText(true);
     hint.getStyleClass().add("muted");
     empty.setWrapText(true);
     empty.getStyleClass().add("muted");
-    Button add = new Button("+ Arbeitsschritt hinzufügen");
+    Button add = new Button(messages.text("checklist.add"));
     add.setId("add-step");
     add.setOnAction(
         event -> {
@@ -100,13 +102,14 @@ final class ChecklistEditor extends VBox {
       completed.setId("step-completed-" + id);
       completed.setAllowIndeterminate(false);
       completed.setSelected(input.completed());
-      completed.setAccessibleText("Arbeitsschritt erledigt");
+      completed.setAccessibleText(messages.text("checklist.done"));
       text.setId("step-text-" + id);
       text.setText(input.text());
-      text.setPromptText("Zum Beispiel Zuschneiden");
-      text.setAccessibleText("Text des Arbeitsschritts");
+      UiSupport.textMenu(text, messages);
+      text.setPromptText(messages.text("checklist.prompt"));
+      text.setAccessibleText(messages.text("checklist.text"));
       HBox.setHgrow(text, Priority.ALWAYS);
-      Button remove = new Button("Entfernen");
+      Button remove = new Button(messages.text("checklist.remove"));
       remove.setId("remove-step-" + id);
       remove.setMinWidth(USE_PREF_SIZE);
       remove.setOnAction(

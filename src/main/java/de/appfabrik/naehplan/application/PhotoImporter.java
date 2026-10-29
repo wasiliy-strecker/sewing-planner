@@ -20,7 +20,7 @@ public final class PhotoImporter {
   public static Photo read(Path path) {
     try {
       if (!Files.isRegularFile(path)) {
-        throw new PhotoException("Bitte wähle eine lesbare JPEG- oder PNG-Datei aus.");
+        throw new PhotoException(PhotoException.Code.FILE);
       }
       if (Files.size(path) > MAX_BYTES) {
         throw tooLarge();
@@ -30,8 +30,7 @@ public final class PhotoImporter {
         return decode(input.readNBytes(MAX_BYTES + 1));
       }
     } catch (IOException | SecurityException exception) {
-      throw new PhotoException(
-          "Das Foto konnte nicht gelesen werden. Bitte prüfe Datei und Zugriffsrechte.", exception);
+      throw new PhotoException(PhotoException.Code.READ, exception);
     }
   }
 
@@ -58,8 +57,7 @@ public final class PhotoImporter {
             || width > MAX_EDGE
             || height > MAX_EDGE
             || (long) width * height > MAX_PIXELS) {
-          throw new PhotoException(
-              "Das Foto ist zu groß. Erlaubt sind höchstens 6000 Pixel je Seite und insgesamt 16 Millionen Pixel.");
+          throw new PhotoException(PhotoException.Code.DIMENSIONS);
         }
         boolean[] warning = {false};
         reader.addIIOReadWarningListener((source, message) -> warning[0] = true);
@@ -73,18 +71,15 @@ public final class PhotoImporter {
         reader.dispose();
       }
     } catch (IOException | IllegalArgumentException exception) {
-      throw new PhotoException(
-          "Das Foto ist beschädigt oder kein lesbares JPEG- oder PNG-Bild.", exception);
+      throw new PhotoException(PhotoException.Code.CORRUPT, exception);
     }
   }
 
   private static PhotoException invalid() {
-    return new PhotoException(
-        "Bitte wähle ein gültiges JPEG- oder PNG-Bild. Andere oder beschädigte Dateien werden nicht übernommen.");
+    return new PhotoException(PhotoException.Code.INVALID);
   }
 
   private static PhotoException tooLarge() {
-    return new PhotoException(
-        "Die Fotodatei ist zu groß. Erlaubt sind höchstens 10 MiB (10.485.760 Bytes).");
+    return new PhotoException(PhotoException.Code.SIZE);
   }
 }

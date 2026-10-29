@@ -1,0 +1,7 @@
+NähPlan
+
+Plan sewing projects with a name, fabric or material, color, storage location, and notes. One optional photo, three status values, and a simple checklist keep track of your work.
+
+Add, rename, check off, or remove steps. Changes are saved together with the project. Search both project details and checklist steps.
+
+Your collection stays on your computer. No account or internet connection is required. The interface is available in German, English, Spanish, French, Italian and Portuguese (Brazil). Language changes apply the next time you start the app.

@@ -17,7 +17,13 @@ class ProjectStatusTest {
         Arrays.stream(ProjectStatus.values()).map(ProjectStatus::storedValue).toList());
     assertEquals(
         List.of("Geplant", "Angefangen", "Fertig"),
-        Arrays.stream(ProjectStatus.values()).map(ProjectStatus::displayName).toList());
+        Arrays.stream(ProjectStatus.values())
+            .map(
+                status ->
+                    new de.appfabrik.naehplan.i18n.Messages(
+                            de.appfabrik.naehplan.i18n.AppLanguage.GERMAN)
+                        .status(status))
+            .toList());
     for (var status : ProjectStatus.values()) {
       assertSame(status, ProjectStatus.fromStoredValue(status.storedValue()));
     }

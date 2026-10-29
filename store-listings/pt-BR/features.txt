@@ -1,0 +1,6 @@
+Nome, tecido, cor, local e notas
+Uma foto JPEG ou PNG opcional
+Status Planejado, Iniciado e Concluído
+Lista com suas próprias etapas
+Pesquisa nos projetos e nas etapas
+Armazenamento local e seis idiomas

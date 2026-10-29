@@ -36,7 +36,7 @@ public final class ProjectService {
 
   public static List<Project> search(List<Project> projects, String query) {
     String needle = normalize(query == null ? "" : query.strip());
-    Collator collator = Collator.getInstance(Locale.GERMAN);
+    Collator collator = Collator.getInstance(Locale.getDefault());
     collator.setStrength(Collator.SECONDARY);
     return projects.stream()
         .filter(project -> matches(project, needle))

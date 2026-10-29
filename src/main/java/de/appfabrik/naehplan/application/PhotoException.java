@@ -1,14 +1,31 @@
 package de.appfabrik.naehplan.application;
 
-/** Safe import error suitable for a dialog. */
+/** Locale-independent import failure. The UI supplies the translated explanation. */
 public final class PhotoException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
-  public PhotoException(String message) {
-    super(message);
+  public enum Code {
+    FILE,
+    READ,
+    DIMENSIONS,
+    CORRUPT,
+    INVALID,
+    SIZE,
+    DISPLAY
   }
 
-  public PhotoException(String message, Throwable cause) {
-    super(message, cause);
+  private final Code code;
+
+  public PhotoException(Code code) {
+    this(code, null);
+  }
+
+  public PhotoException(Code code, Throwable cause) {
+    super(code.name(), cause);
+    this.code = code;
+  }
+
+  public Code code() {
+    return code;
   }
 }

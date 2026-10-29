@@ -1,0 +1,4 @@
+Sfoglia i progetti con foto, stato e fasi.
+Modifica i dettagli e le fasi insieme.
+Trova i progetti di cucito attraverso le note.
+Scegli la lingua per il prossimo avvio.

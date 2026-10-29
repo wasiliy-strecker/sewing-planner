@@ -1,0 +1,6 @@
+Nom, tissu, couleur, emplacement et notes
+Une photo JPEG ou PNG facultative
+États Prévu, En cours et Terminé
+Liste de vos propres étapes
+Recherche dans les projets et les étapes
+Stockage local et six langues
