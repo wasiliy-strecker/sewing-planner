@@ -1,5 +1,6 @@
 package de.appfabrik.naehplan.ui;
 
+import de.appfabrik.naehplan.application.CollectionLimits;
 import de.appfabrik.naehplan.domain.ChecklistStep;
 import de.appfabrik.naehplan.i18n.Messages;
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ final class ChecklistEditor extends VBox {
   private final List<StepRow> rows = new ArrayList<>();
   private final VBox list = new VBox(8);
   private final Label empty = new Label();
+  private final Label summary = new Label();
+  private final Label limit = new Label();
+  private final Button add = new Button();
   private final Messages messages;
 
   ChecklistEditor(List<ChecklistStep> steps, Messages messages) {
@@ -34,19 +38,21 @@ final class ChecklistEditor extends VBox {
     hint.getStyleClass().add("muted");
     empty.setWrapText(true);
     empty.getStyleClass().add("muted");
-    Button add = new Button(messages.text("checklist.add"));
+    summary.setId("checklist-summary");
+    summary.setWrapText(true);
+    summary.getStyleClass().add("field-label");
+    limit.setId("checklist-limit");
+    limit.setWrapText(true);
+    limit.getStyleClass().add("error-text");
+    limit.managedProperty().bind(limit.visibleProperty());
+    add.setText(messages.text("checklist.add"));
     add.setId("add-step");
-    add.setOnAction(
-        event -> {
-          int position = rows.isEmpty() ? 0 : Math.addExact(rows.getLast().position, 1);
-          StepRow row = addRow(new StepInput(UUID.randomUUID(), "", false, position));
-          row.text.requestFocus();
-        });
-    getChildren().addAll(heading, hint, empty, list, add);
+    add.setOnAction(event -> addStep());
+    getChildren().addAll(heading, hint, summary, empty, list, add, limit);
     for (ChecklistStep step : steps) {
       addRow(new StepInput(step.id(), step.text(), step.completed(), step.position()));
     }
-    updateEmpty();
+    updateState();
   }
 
   List<StepInput> input() {
@@ -70,13 +76,40 @@ final class ChecklistEditor extends VBox {
     StepRow row = new StepRow(input);
     rows.add(row);
     list.getChildren().add(row);
-    updateEmpty();
     return row;
   }
 
-  private void updateEmpty() {
+  private void addStep() {
+    if (rows.size() >= CollectionLimits.MAX_STEPS || positionExhausted()) {
+      updateState();
+      return;
+    }
+    int position = rows.isEmpty() ? 0 : rows.getLast().position + 1;
+    StepRow row = addRow(new StepInput(UUID.randomUUID(), "", false, position));
+    updateState();
+    row.text.requestFocus();
+  }
+
+  private boolean positionExhausted() {
+    return !rows.isEmpty() && rows.getLast().position == Integer.MAX_VALUE;
+  }
+
+  private void updateState() {
     empty.setVisible(rows.isEmpty());
     empty.setManaged(rows.isEmpty());
+    summary.setText(
+        messages.text(
+            "checklist.summary",
+            rows.stream().filter(row -> row.completed.isSelected()).count(),
+            rows.size()));
+    boolean full = rows.size() >= CollectionLimits.MAX_STEPS;
+    boolean exhausted = positionExhausted();
+    add.setDisable(full || exhausted);
+    limit.setVisible(full || exhausted);
+    limit.setText(
+        full
+            ? messages.text("checklist.limit", CollectionLimits.MAX_STEPS)
+            : exhausted ? messages.text("checklist.positionLimit") : "");
   }
 
   /** Snapshot equality includes raw text, IDs, completion and explicit position. */
@@ -103,21 +136,45 @@ final class ChecklistEditor extends VBox {
       completed.setAllowIndeterminate(false);
       completed.setSelected(input.completed());
       completed.setAccessibleText(messages.text("checklist.done"));
+      completed.selectedProperty().addListener(observable -> updateState());
       text.setId("step-text-" + id);
       text.setText(input.text());
       UiSupport.textMenu(text, messages);
       text.setPromptText(messages.text("checklist.prompt"));
       text.setAccessibleText(messages.text("checklist.text"));
+      text.setOnAction(
+          event -> {
+            // Keep Enter inside the checklist instead of triggering the dialog's Save button.
+            event.consume();
+            if (text.getText()
+                .codePoints()
+                .noneMatch(c -> !Character.isWhitespace(c) && !Character.isSpaceChar(c))) {
+              return;
+            }
+            int index = rows.indexOf(this);
+            if (index + 1 < rows.size()) {
+              rows.get(index + 1).text.requestFocus();
+            } else {
+              addStep();
+            }
+          });
       HBox.setHgrow(text, Priority.ALWAYS);
       Button remove = new Button(messages.text("checklist.remove"));
       remove.setId("remove-step-" + id);
       remove.setMinWidth(USE_PREF_SIZE);
+      remove.getStyleClass().add("danger");
       remove.setOnAction(
           event -> {
             // The UUID identifies the step. Duplicate text and changed positions do not.
+            int index = rows.indexOf(this);
             rows.removeIf(row -> row.id.equals(id));
             list.getChildren().remove(this);
-            updateEmpty();
+            updateState();
+            if (rows.isEmpty()) {
+              add.requestFocus();
+            } else {
+              rows.get(Math.min(index, rows.size() - 1)).text.requestFocus();
+            }
           });
       getChildren().addAll(completed, text, remove);
     }

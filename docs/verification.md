@@ -1,5 +1,58 @@
 # Prüfbericht
 
+## Checklisten und nachgeholte Regressionstests, 31. Oktober 2026
+
+Der neue Nutzerauftrag umfasst die Korrektur der Prüfbefunde und die Übertragung
+auf die vierte und fünfte Java-App. Damit wird auch die zuvor zurückgestellte
+Funktionsprüfung durchgeführt. Nur synthetische Daten und eigene virtuelle
+X11-Bildschirme wurden verwendet.
+
+Der Editorinhalt und die gespeicherte Checkliste halten rechts 16 Pixel Abstand
+zum Scrollbalken. Der Erledigt-Zähler ist in allen sechs Sprachen vollständig.
+Enter im Schritttext wechselt zum nächsten Schritt oder ergänzt am Ende eine
+leere Zeile, ohne das Projekt zu speichern. Leeres Enter ergänzt keine weitere
+Zeile. Entfernen erhält einen sinnvollen Fokus, fokussierte Eingaben scrollen
+bei Bedarf in den sichtbaren Bereich.
+
+Die höchste gespeicherte Schrittposition löst beim Hinzufügen keinen Überlauf
+mehr aus. Die Schaltfläche bleibt mit übersetzter Erklärung deaktiviert.
+Dasselbe gilt bei 10.000 Schritten. Bestehende IDs, Positionen, Texte und
+Häkchen bleiben erhalten. Die Screenreader-Beschriftung beschreibt in jeder
+Sprache das richtige Projektfoto.
+
+Tatsächlich bestanden:
+
+- Vollständiges `./mvnw --batch-mode --no-transfer-progress verify -Dnaehplan.uiTests=true`
+  mit 179 Tests, ohne Fehler oder übersprungene Tests. Compiler-Lint,
+  Enforcer, Spotless und SpotBugs ohne Befunde. Protokoll:
+  `target/checklist-verify.log`.
+- Die 25 JavaFX-Prüfungen nach Präzisierung der asynchronen Fenstergrößenprüfung
+  erneut bestanden. Protokoll `target/checklist-ui-final.log`. Sie prüfen unter
+  anderem sechs Sprachen, importierte Maximalpositionen, Bearbeiten und Speichern,
+  Enter, Fokus, Verwerfschutz, Scrollabstand und fünf Spalten mit je sechs echten
+  Mausklicks. Suche erhält Sortierung und die Zuordnung zum richtigen Editor.
+- JSON-Rückimport mit kollidierenden Schritt-IDs, gleichen Projektinhalten,
+  verschiedenen Statuswerten und Häkchen. Mehrfachimport ergänzt keine weiteren
+  Kopien. Späte JSON- und SQLite-Fehler hinterlassen keine Teilimporte.
+  10.000 Schritte und die höchste Position bleiben beim Rückimport unverändert.
+- Fotooptimierung einschließlich aller acht EXIF-Ausrichtungen für JPEG und PNG,
+  Transparenz, unveränderter Quelldateien und gespeicherter Fotobytes.
+  Der gemerkte Bilderordner überlebt einen Neustart und behandelt Fehler.
+- Synthetische Aufnahmen in `target/checklist-review/` erzeugt. Der verkleinerte
+  Dialog wurde zusätzlich visuell geprüft. Die sechs Sprachen wurden geometrisch
+  auf Abstand und Sichtbarkeit des fokussierten Schritts geprüft.
+
+Veraltete Test-Konstruktoraufrufe wurden an die aktuellen Abhängigkeiten angepasst.
+
+Das vorhandene Linux-App-Image wurde mit dem geprüften App-JAR und der Anleitung
+aktualisiert. JAR-Hashes stimmen überein, der eingebettete Launcher meldet
+`Sewing Planner 0.1.0`. Laufzeit und Abhängigkeiten wurden nicht ersetzt.
+Die frühere Sewing-Planner-Instanz wurde regulär geschlossen und die aktualisierte
+App für den Nutzer geöffnet. Persönliche Sammlungen wurden nicht als Testdaten
+verwendet. Keine Store-Pakete, kein Upload und kein Push. Native Windows- und
+macOS-Funktionsabnahmen bleiben separat.
+
+
 ## Sortierbare Projektliste, 31. Oktober 2026
 
 Die vollständige Sortierfunktion aus Knitting Projects bis Commit `ca8d75e`

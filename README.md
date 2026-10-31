@@ -60,6 +60,26 @@ Bereits vorhandene größere Sammlungen werden nicht gekürzt. Ihre Einträge
 bleiben lesbar, bearbeitbar und löschbar. Für eine vollständige Dateisicherung
 außerhalb dieser Exportgrenzen die App schließen und die Datenbank kopieren.
 
+## Checklisten-Korrekturen vom 31. Oktober 2026
+
+Die Checkliste hält rechts 16 Pixel Abstand zum Scrollbalken. Im Editor und
+im Hauptfenster steht die Zahl der erledigten Schritte. Im Editor zählt sie
+den aktuellen Entwurf, im Hauptfenster den gespeicherten Stand.
+
+Enter im ausgefüllten Schritttext wechselt zum nächsten Schritt. Am Ende
+entsteht eine neue leere Zeile. Enter in einer leeren Zeile fügt nichts hinzu.
+Speichern erfolgt über die Schaltfläche oder Strg+S beziehungsweise Cmd+S.
+Nach dem Entfernen bleibt der Tastaturfokus bei einem benachbarten Schritt
+oder bei „Arbeitsschritt hinzufügen“. Fokussierte Eingaben werden bei Bedarf
+in den sichtbaren Bereich gescrollt.
+
+Bei 10.000 Schritten oder einer ausgeschöpften gespeicherten Schrittposition
+bleibt das Hinzufügen deaktiviert und zeigt eine Erklärung. Vorhandene
+Schrittkennungen und Positionen werden nicht umgeschrieben. Bearbeiten,
+Abhaken, Entfernen und gemeinsames Speichern bleiben verfügbar.
+Die Foto-Beschriftung für Screenreader bezeichnet in allen sechs Sprachen
+das Projektfoto passend zur App.
+
 ## Starten
 
 Build und CI verwenden Eclipse Temurin 21.0.13+9. Maven prüft Hersteller,
@@ -165,6 +185,7 @@ verworfen. Während Import und Speichern wartet der Dialog auf den Abschluss.
 | Escape | Abbrechen mit Verwerfschutz |
 | Leertaste auf einem Kästchen | Schritt abhaken oder wieder öffnen |
 | Enter im Notizfeld | Neue Zeile |
+| Enter im Schritttext | Zum nächsten Schritt wechseln oder am Ende einen Schritt ergänzen |
 | Tab / Umschalt+Tab | Steuerelement wechseln |
 
 ## Lokale Daten

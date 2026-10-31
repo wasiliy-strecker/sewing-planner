@@ -175,7 +175,10 @@ final class ProjectEditor {
     HBox.setHgrow(fields, Priority.ALWAYS);
     HBox columns = new HBox(24, fields, photoForm);
     columns.setPadding(new Insets(2));
-    ScrollPane scroll = new ScrollPane(new VBox(22, columns, checklist));
+    VBox content = new VBox(22, columns, checklist);
+    content.setPadding(new Insets(0, 16, 4, 0));
+    ScrollPane scroll = new ScrollPane(content);
+    scroll.setId("project-editor-scroll");
     scroll.setFitToWidth(true);
     scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     HBox actions = new HBox(10, cancel, save);
@@ -185,6 +188,9 @@ final class ProjectEditor {
     VBox.setVgrow(scroll, Priority.ALWAYS);
     Scene scene = new Scene(root, 800, 780);
     UiSupport.style(scene);
+    scene
+        .focusOwnerProperty()
+        .addListener((observable, previous, current) -> revealFocus(scroll, current));
     scene
         .getAccelerators()
         .put(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN), this::save);
@@ -207,6 +213,41 @@ final class ProjectEditor {
       preview.load(() -> existingPhoto, tasks);
     }
     updatePhotoButtons();
+  }
+
+  private static void revealFocus(ScrollPane scroll, javafx.scene.Node control) {
+    if (control == null) {
+      return;
+    }
+    javafx.scene.Node ancestor = control;
+    while (ancestor != null && ancestor != scroll.getContent()) {
+      ancestor = ancestor.getParent();
+    }
+    if (ancestor == null) {
+      return;
+    }
+    Platform.runLater(
+        () -> {
+          if (control.getScene() == null || control.getScene().getFocusOwner() != control) {
+            return;
+          }
+          control.getScene().getRoot().layout();
+          var content = scroll.getContent();
+          var bounds = content.sceneToLocal(control.localToScene(control.getBoundsInLocal()));
+          double viewport = scroll.getViewportBounds().getHeight();
+          double range = content.getLayoutBounds().getHeight() - viewport;
+          if (range <= 0) {
+            return;
+          }
+          double top = scroll.getVvalue() * range;
+          double target = top;
+          if (bounds.getMinY() < top) {
+            target = bounds.getMinY() - 8;
+          } else if (bounds.getMaxY() > top + viewport) {
+            target = bounds.getMaxY() + 8 - viewport;
+          }
+          scroll.setVvalue(Math.max(0, Math.min(1, target / range)));
+        });
   }
 
   private ListCell<ProjectStatus> statusCell() {

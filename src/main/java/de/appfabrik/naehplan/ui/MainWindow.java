@@ -256,6 +256,7 @@ final class MainWindow {
     checklistHint.getStyleClass().add("muted");
     checklistHint.setWrapText(true);
     checklist.setId("saved-checklist");
+    checklist.setPadding(new Insets(0, 16, 0, 0));
     ScrollPane checklistScroll = new ScrollPane(checklist);
     checklistScroll.setFitToWidth(true);
     checklistScroll.setPrefHeight(110);
@@ -305,7 +306,12 @@ final class MainWindow {
             ? messages.text("checklist.select")
             : project.steps().isEmpty()
                 ? messages.text("checklist.none")
-                : messages.text("checklist.saved"));
+                : messages.text(
+                        "checklist.summary",
+                        project.steps().stream().filter(step -> step.completed()).count(),
+                        project.steps().size())
+                    + " · "
+                    + messages.text("checklist.saved"));
     if (project != null) {
       for (var step : project.steps()) {
         Label label = new Label((step.completed() ? "✓  " : "○  ") + step.text());
