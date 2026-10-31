@@ -1,5 +1,35 @@
 # Prüfbericht
 
+## Deutsche Mac-Store-Inhalte ohne App-Build, 31. Oktober 2026
+
+Nach dem Vorbild von Knitting Projects 13 deutsche Felddateien und vier echte
+Aufnahmen der vorhandenen App vorbereitet. Die Version 1.0 ist der geplante
+Store-Eintrag. Die laufende App-Version und die Paketierung bleiben unverändert.
+Die englische Apple-Kennung de.appfabrik.sewingplanner ist vorgesehen, ihre
+Registrierung wurde nicht geprüft.
+
+Fünf erfundene Nähprojekte enthalten alle drei Statuswerte, fünf Farbcodes,
+drei vorhandene eigene Illustrationen und 15 Schritte mit sechs erledigten
+Häkchen. Import und erneuter Import erhalten den vollständigen Bestand.
+Der echte UI-Export bei aktiver Suche enthält alle fünf Projekte einschließlich
+unveränderter Texte, Fotos, Statuswerte, Schritt-IDs, Positionen und Häkchen.
+Die gezielten Prüfungen dienen der Asset-Erstellung, nicht einer Release-Abnahme.
+
+Aufnahmen auf eigenem Xvfb in 2560 × 1600 RGB. Übersicht, Checklisten-Editor,
+aktive Suche und erfolgreicher Export wurden visuell geprüft. Die bestehenden
+App-JARs und JavaFX-Module werden gelesen und vor sowie nach der Aufnahme
+per SHA256 verglichen. Kein App-Build, Maven-Aufruf oder Paketbau ausgeführt.
+Der separate Java-Aufnahmehelfer wurde im Quelltextmodus ausgeführt.
+Google Java Format, Ruff, Python-Syntax, Feldgrenzen und Dateihashes geprüft.
+Beide öffentlichen Links antworten mit HTTP 200. Keine komplette Testsuite.
+
+Aufnahme und Nachweise liegen unter
+`target/mac-store-content-drafts-20261031-2327/`.
+`scripts/mac_store_content.py` liefert ausschließlich die ausgewählten Assets
+mit Quellcommit, Prüfnachweisen und SHA256-Inventar. Anleitung:
+`docs/mac-app-store-fields.md`. Linux-Bildentwürfe, keine finalen Mac-Screenshots.
+Keine persönlichen Daten als Beispiele, kein Upload, kein Push und keine ZIP-Datei.
+
 ## Vollständiger Custom-Color-Dialog, 31. Oktober 2026
 
 Der native JavaFX-Farbdialog verwendet jetzt 50 × 34 em bevorzugte Inhaltsgröße,

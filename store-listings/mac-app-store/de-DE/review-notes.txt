@@ -1,0 +1,13 @@
+Sewing Planner verwaltet private Nähprojekte lokal. Es sind kein Konto, keine Anmeldung und kein Demo-Zugang erforderlich. Bitte „Anmeldung erforderlich“ deaktivieren.
+
+Zum Einstieg über „Add project“ ein Projekt anlegen. Nur der Projektname ist erforderlich. Optional Stoff oder Material, Farbe, Aufbewahrungsort, Notizen und ein JPEG- oder PNG-Foto ergänzen. Neue Projekte beginnen mit „Planned“. Der Status kann jederzeit zwischen „Planned“, „Started“ und „Finished“ wechseln.
+
+Im Projekteditor unter „Checklist“ Arbeitsschritte hinzufügen, bearbeiten und abhaken. Textänderungen und Häkchen werden erst mit „Save“ übernommen. Der Projektstatus bleibt unabhängig von der Checkliste. Abbrechen schützt ungespeicherte Änderungen.
+
+Die App startet auf Englisch. Unter „Language“ Deutsch wählen und die App neu starten, um die deutsche Oberfläche zu verwenden. In der deutschen Oberfläche heißen die Statuswerte „Geplant“, „Angefangen“ und „Fertig“.
+
+Die Suche berücksichtigt die fünf Projekttextfelder und die Texte der Arbeitsschritte. Die Spaltenüberschriften sortieren die Liste. Bearbeiten und Löschen beziehen sich auf das ausgewählte Projekt. Löschen verlangt eine Bestätigung.
+
+„Export“ beziehungsweise „Exportieren“ sichert die gesamte Sammlung als JSON, einschließlich Projektstatus, Farben, gespeicherter Fotos und Checklistenschritten. Eine aktive Suche begrenzt den Export nicht. „Import“ beziehungsweise „Importieren“ ergänzt die Sammlung und überspringt bereits enthaltene identische Kopien.
+
+Neue Fotos werden als optimierte Kopie gespeichert. Die Originaldateien bleiben erhalten. Die App benötigt keine Internetverbindung und enthält keine Werbung, Analytics oder In-App-Käufe. Die Datenschutzerklärung ist offline unter „Info“ verfügbar.

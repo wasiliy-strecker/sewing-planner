@@ -1,0 +1,21 @@
+Mit Sewing Planner behältst du deine Nähprojekte im Überblick. Halte Ideen fest, begleite angefangene Arbeiten und freue dich über fertige Stücke. Für ein neues Projekt genügt ein Name.
+
+Geplant, angefangen oder fertig
+Gib jedem Projekt einen der drei Statuswerte. Du kannst den Status jederzeit ändern, auch wieder zurück. In der Liste erkennst du sofort, woran du gerade arbeitest.
+
+Schritt für Schritt nähen
+Ergänze eine eigene Checkliste für Zuschnitt, Nähte und letzte Handgriffe. Füge Arbeitsschritte hinzu, bearbeite ihre Texte und hake Erledigtes ab. Änderungen werden gemeinsam mit dem Projekt gespeichert. Die Checkliste verändert den Projektstatus nicht automatisch.
+
+Alles zum Projekt an einem Ort
+Ergänze Stoff oder Material, Farbe, Aufbewahrungsort und persönliche Notizen. Wähle eine Farbe mit dem Farbwähler und füge ein optionales JPEG- oder PNG-Foto hinzu. Neue Fotos werden platzsparend als Kopie gespeichert. Deine Originaldateien bleiben unverändert.
+
+Schnell wiederfinden
+Durchsuche Projektnamen, Material, Farbe, Aufbewahrungsort, Notizen und Arbeitsschritte. Sortiere die Liste per Klick nach Name, Status, Material, Farbe oder Ort. Das ausgewählte Projekt zeigt sein Foto, seine Notizen und seine gespeicherte Checkliste direkt unter der Liste.
+
+Deine Sammlung sichern
+Exportiere alle Projekte als JSON-Datei, einschließlich Status, Farbwerten, gespeicherten Fotos und Checklisten. Beim Import bleiben vorhandene Projekte erhalten. Bereits enthaltene identische Kopien werden übersprungen. Deine Sicherungen speicherst und verwaltest du selbst.
+
+Lokal und ohne Konto
+Sewing Planner funktioniert ohne Anmeldung und ohne Internetverbindung. Deine Sammlung bleibt auf deinem Mac. Es gibt keine Werbung, kein Tracking und keine eigene Cloud-Synchronisierung. Die App verschlüsselt ihre lokalen Daten und exportierten Dateien nicht selbst.
+
+Die Oberfläche ist auf Deutsch, Englisch, Spanisch, Französisch, Italienisch und Portugiesisch (Brasilien) verfügbar. Beim ersten Start ist Englisch eingestellt. Unter „Language“ kannst du Deutsch auswählen und die App neu starten.

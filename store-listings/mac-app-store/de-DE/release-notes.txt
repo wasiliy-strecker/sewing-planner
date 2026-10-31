@@ -1,0 +1,3 @@
+Erste Version von Sewing Planner für macOS.
+
+Verwalte Nähprojekte mit Name, Stoff oder Material, Farbe, Aufbewahrungsort, Notizen und einem optionalen Foto. Behalte mit Geplant, Angefangen und Fertig den Projektstatus im Blick und halte Arbeitsschritte in der Checkliste fest. Suche und sortiere deine Projekte und sichere die ganze Sammlung einschließlich Fotos, Status und Checklisten als JSON. Alle Daten werden lokal gespeichert.

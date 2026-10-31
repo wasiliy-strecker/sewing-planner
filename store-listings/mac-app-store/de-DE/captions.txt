@@ -1,0 +1,4 @@
+Deine Nähprojekte mit Foto und Status im Überblick
+Arbeitsschritte festhalten und Erledigtes abhaken
+Nähideen und Projektnotizen schnell wiederfinden
+Projekte mit Fotos und Checklisten als JSON sichern

@@ -1,5 +1,9 @@
 # Sewing Planner
 
+Die [deutschen Mac-Store-Inhalte](docs/mac-app-store-fields.md) enthalten vier
+Bildentwürfe und kopierbare Texte. Die Aufnahme verwendet vorhandene App-JARs
+ohne App-Build. Native Mac-Aufnahmen und technische Veröffentlichung folgen separat.
+
 Deine Ideen. Stich für Stich. Verwalte kleine Nähprojekte mit Projektname,
 Stoff oder Material, Farbe, Aufbewahrungsort, mehrzeiliger Notiz, einem
 optionalen Foto und dem Status **Geplant**, **Angefangen** oder **Fertig**.

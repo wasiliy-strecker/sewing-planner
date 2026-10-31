@@ -103,3 +103,19 @@ Sammlung öffnen. Ungespeicherte Entwürfe vor Neustart schützen.
 
 Der Nutzer übernimmt in diesem Auftrag die Tests selbst. Paketbau mit
 `-Dmaven.test.skip=true` und statische Analyse, keine Test- oder GUI-Suite.
+
+## Mac-Store-Inhalte vom 31. Oktober 2026
+
+Für die ausdrücklich beauftragte Inhaltslieferung nach dem Vorbild von
+Knitting Projects keine App-Builds, Maven-Aufrufe, Paketierung oder Uploads.
+`scripts/mac_store_content.py` verwendet die vorhandenen geprüften App-JARs.
+Der separate Aufnahmehelfer läuft im Java-Quelltextmodus mit eigenen temporären
+Daten und eigenem Xvfb. Seine gezielten Import-/Exportprüfungen gehören zur
+Asset-Erstellung. Keine vollständige Release-Testserie für diese Inhaltsänderung.
+
+Vier deutsche Linux-Bildentwürfe, kopierbare Storetexte, synthetischer Beispielbestand
+und bestehende Datenschutzerklärung werden in einem neuen Ordner ohne ZIP geliefert.
+Persönliche Sammlungen und die geöffnete Nutzer-App bleiben unberührt.
+Die vorgesehene neue Apple-Kennung ist `de.appfabrik.sewingplanner`.
+Ihre Registrierung ist nicht bestätigt. Eine Umstellung bestehender technischer
+Kennungen ist kein Teil der Inhaltslieferung. Native Mac-Aufnahmen folgen separat.
