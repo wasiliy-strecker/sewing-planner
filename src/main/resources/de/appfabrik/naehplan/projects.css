@@ -71,3 +71,12 @@
 .color-clear { -fx-padding: 7px 11px; -fx-font-size: 18px; }
 .color-clear:focused { -fx-padding: 5px 9px; }
 .color-code { -fx-font-family: "Monospaced"; -fx-font-size: 12px; -fx-text-fill: #253c34; }
+
+/* Leave room for styled inputs, action buttons and native window decorations. */
+.custom-color-dialog {
+  -fx-pref-width: 50em;
+  -fx-pref-height: 34em;
+}
+.custom-color-dialog .controls-pane {
+  -fx-min-width: 26em;
+}

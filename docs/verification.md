@@ -1,5 +1,43 @@
 # Prüfbericht
 
+## Vollständiger Custom-Color-Dialog, 31. Oktober 2026
+
+Der native JavaFX-Farbdialog verwendet jetzt 50 × 34 em bevorzugte Inhaltsgröße,
+bei der App-Schrift 700 × 476 Pixel. Der rechte Bedienbereich erhält mindestens
+26 em für vollständige übersetzte Beschriftungen. Das Fenster ist vergrößerbar.
+Die Mindestgröße berücksichtigt nach dem Layout die tatsächliche Titelleiste
+und den Fensterrahmen. Der Dialog wird über dem Editor innerhalb des Bildschirms
+positioniert und erst anschließend eingeblendet. Die Umsetzung verwendet
+öffentliche JavaFX-APIs und bleibt vollständig app-lokal.
+
+Geprüft mit `./mvnw --batch-mode --no-transfer-progress spotless:apply verify`.
+165 gemeldete Tests, davon 11 übersprungen, keine Fehler. Compiler-Lint,
+Enforcer, Spotless und SpotBugs bestanden. Protokoll:
+`target/color-dialog-verify.log`.
+Die standardmäßig deaktivierten älteren GUI-Suiten wurden hierbei nicht erneut aktiviert.
+
+Ein separater temporärer GUI-Prüfhelfer verwendet das echte Farbfeld und den
+nativen Dialog ohne Sammlung oder Datenbank. Auf einem eigenen Xvfb mit Openbox
+bei 800 × 600 Pixeln wurden en-US, de-DE, es-ES, fr-FR, it-IT und pt-BR geprüft.
+Alle 272 Prüfbedingungen je Sprache bestanden. HSB, RGB und Web, vollständig
+sichtbare Schaltflächen und Beschriftungen, Verkleinerung auf die Mindestgröße,
+Speichern, Verwenden, Abbrechen, Escape, Fensterschließen und erneutes Öffnen.
+Protokoll: `target/color-dialog-gui.log`. Synthetische Aufnahmen normaler und
+minimaler Fenstergröße: `target/custom-color-review/`. Repräsentative Aufnahmen
+wurden zusätzlich visuell geprüft.
+
+Manuelle Wiederholungsprüfung: Ein Farbfeld öffnen, „Custom Color“ wählen und
+alle drei Register durchgehen. Die unteren Aktionen müssen vollständig sichtbar
+sein. Die Fenstergröße bis zur Mindestgröße ändern und erneut prüfen. Eine
+andere Farbe wählen und jeweils Verwenden, Speichern sowie die Abbruchwege
+testen. Der Farbfeldwert darf sich nur beim Übernehmen ändern. Den Dialog
+zwischen den Schritten erneut öffnen.
+
+Das vorhandene lokale Linux-App-Image mit dem geprüften App-JAR aktualisiert.
+JAR-Hashes stimmen überein. Der eingebettete Launcher meldet
+`Sewing Planner 0.1.0`. Native Windows- und macOS-Abnahmen sind separat.
+
+
 ## Checklisten und nachgeholte Regressionstests, 31. Oktober 2026
 
 Der neue Nutzerauftrag umfasst die Korrektur der Prüfbefunde und die Übertragung

@@ -28,6 +28,7 @@ final class ProjectColorField extends HBox {
     picker.getStyleClass().add("project-color-picker");
     picker.setMinWidth(64);
     picker.setPrefWidth(64);
+    new CustomColorDialogSizing(picker);
     picker.setTooltip(new Tooltip(messages.text("color.choose")));
     description.setMinWidth(0);
     description.setMaxWidth(Double.MAX_VALUE);
