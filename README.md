@@ -99,6 +99,18 @@ Datenverzeichnisse verwenden die ASCII-Schreibweise `NaehPlan` beziehungsweise
 
 ## Bedienung
 
+Die fünf Spaltenüberschriften sortieren per Klick nach Projektname, Status,
+Material, Farbe oder Aufbewahrungsort. Jede Überschrift zeigt dauerhaft ein
+Pfeilpaar. Die aktive Richtung wird hervorgehoben. Wiederholte Klicks wechseln
+zwischen A–Z und Z–A. Die Spalten bleiben in ihrer ursprünglichen Reihenfolge
+und lassen sich nicht verschieben.
+
+Standard ist Projektname aufsteigend. Der alphabetische Vergleich richtet sich
+nach der App-Sprache und ignoriert Groß- und Kleinschreibung. Status verwendet
+den angezeigten übersetzten Text, Farbe den Farbcode oder vorhandenen Farbtext.
+Suche, Speichern, Löschen und Import behalten die gewählte Sortierung.
+Eine weiterhin sichtbare Auswahl bleibt dem gleichen Projekt zugeordnet.
+
 „Projekt hinzufügen“ und „Bearbeiten“ öffnen denselben Dialog. Nur der
 Projektname ist erforderlich. Gleichnamige Projekte sind unabhängig.
 Neue Projekte beginnen mit „Geplant“ und einer leeren Checkliste.

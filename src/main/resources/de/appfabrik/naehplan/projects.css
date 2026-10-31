@@ -38,8 +38,13 @@
 .text-area .content { -fx-background-color: white; }
 .table-view { -fx-background-color: white; -fx-border-color: #dce1d8; -fx-border-radius: 7px; -fx-background-radius: 7px; -fx-padding: 1px; }
 .table-view .column-header-background, .table-view .column-header, .table-view .filler { -fx-background-color: #f1eaf0; }
-.table-view .column-header { -fx-padding: 12px 8px; }
+.table-view .column-header { -fx-padding: 12px 8px; -fx-cursor: hand; }
+.table-view .column-header:hover { -fx-background-color: #e4d9e1; }
 .table-view .column-header .label { -fx-alignment: CENTER_LEFT; -fx-text-fill: #506453; }
+.table-view .column-header > .label { -fx-content-display: right; -fx-graphic-text-gap: 8px; }
+.sort-chevron { -fx-background-color: -fx-accent; }
+.sort-chevron.up { -fx-shape: "M 0 5 L 4.5 0 L 9 5 Z"; }
+.sort-chevron.down { -fx-shape: "M 0 0 L 4.5 5 L 9 0 Z"; }
 .table-row-cell { -fx-cell-size: 48px; -fx-background-color: white; }
 .table-row-cell:odd { -fx-background-color: #fbfcf9; }
 .table-cell { -fx-padding: 12px 10px; -fx-border-color: transparent; -fx-text-fill: #3d3540; }

@@ -1,5 +1,41 @@
 # Prüfbericht
 
+## Sortierbare Projektliste, 31. Oktober 2026
+
+Die vollständige Sortierfunktion aus Knitting Projects bis Commit `ca8d75e`
+wurde app-lokal übernommen. Alle fünf Spalten besitzen dauerhafte Pfeilpaare
+und alphabetische Sortierung in der App-Sprache ohne Groß-/Kleinschreibung.
+Die aktive Richtung ist hervorgehoben. Klicks wechseln zwischen A–Z und Z–A,
+ohne den nativen dritten Zustand ohne Sortierung beizubehalten. Die Reihenfolge
+Projektname, Status, Material, Farbe, Aufbewahrungsort ist gegen Verschieben
+gesperrt. Pfeile und Hoverfarbe passen zur bestehenden App-Farbe.
+
+Initial wird nach Projektname aufsteigend sortiert. Nach Suche, Speichern,
+Löschen und Import wird die aktive Sortierung erneut angewendet, bevor eine
+weiterhin sichtbare Auswahl anhand der Projekt-ID wiederhergestellt wird.
+Notiz, Foto und Checkliste bleiben an das ausgewählte Projekt gebunden.
+
+Manuelle Abnahme durch den Nutzer, noch nicht ausgeführt:
+
+- Jede Überschrift mindestens sechsmal anklicken. A–Z und Z–A wechseln,
+  alle Pfeilpaare bleiben sichtbar und die hervorgehobene Richtung stimmt.
+- Zwischen allen fünf Spalten wechseln. Status alphabetisch nach dem
+  angezeigten Text und Farbe nach Farbcode beziehungsweise Farbtext prüfen.
+- Überschriften seitlich ziehen. Keine Spalte darf ihre Position wechseln.
+- Ein Projekt auswählen, umsortieren und Notiz, Foto sowie Checkliste prüfen.
+  Bearbeiten muss das ausgewählte Projekt mit seinen gespeicherten Schritten öffnen.
+- Absteigend sortieren, suchen, null Treffer erzeugen und die Suche leeren.
+  Die Sortierung muss auch nach Hinzufügen, Bearbeiten, Löschen und Import gelten.
+- Leere Felder, gleiche Werte, gemischte Großschreibung, Umlaute, Akzente und
+  schmale Fenster prüfen.
+
+Gemäß app-lokaler Vorgabe keine Test- oder GUI-Suite. Formatter, Compiler-Lint,
+Enforcer, Paketbau und SpotBugs bestanden mit
+`./mvnw --batch-mode --no-transfer-progress spotless:apply package spotbugs:check -Dmaven.test.skip=true`.
+Protokoll: `target/column-sorting-build.log`. Die manuelle Bedienprüfung bleibt offen.
+Das lokale Linux-App-Image wurde mit App-JAR und Anleitung aktualisiert und
+für den Nutzer geöffnet. Laufzeit, Abhängigkeiten und Datenformat bleiben gleich.
+
 ## Übertragung des Yarn-Box-Stands, 31. Oktober 2026
 
 Übernommen wurden die Verbesserungen dieses Chats und die Nachkorrekturen

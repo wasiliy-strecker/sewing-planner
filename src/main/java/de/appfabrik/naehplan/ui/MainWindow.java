@@ -10,6 +10,7 @@ import de.appfabrik.naehplan.i18n.Messages;
 import de.appfabrik.naehplan.persistence.PhotoDirectoryPreferences;
 import java.io.File;
 import java.nio.file.FileAlreadyExistsException;
+import java.text.Collator;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -162,7 +163,9 @@ final class MainWindow {
     HBox searchBar = new HBox(10, search, clear);
     table.setId("projects-table");
     table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-    table.getColumns().add(column(messages.text("field.name"), Project::name, 300));
+    TableColumn<Project, String> projectName =
+        column(messages.text("field.name"), Project::name, 300);
+    table.getColumns().add(projectName);
     TableColumn<Project, String> projectStatus =
         column(messages.text("field.status"), project -> messages.status(project.status()), 150);
     projectStatus.setMinWidth(125);
@@ -170,6 +173,8 @@ final class MainWindow {
     table.getColumns().add(column(messages.text("field.materialShort"), Project::material, 190));
     table.getColumns().add(colorColumn());
     table.getColumns().add(column(messages.text("field.location"), Project::location, 240));
+    ProjectTableSorting.configure(table);
+    table.getSortOrder().add(projectName);
     table
         .getSelectionModel()
         .selectedItemProperty()
@@ -315,12 +320,15 @@ final class MainWindow {
     }
   }
 
-  private static TableColumn<Project, String> column(
+  private TableColumn<Project, String> column(
       String name, Function<Project, String> value, int width) {
     TableColumn<Project, String> column = new TableColumn<>(name);
     column.setCellValueFactory(cell -> new ReadOnlyStringWrapper(value.apply(cell.getValue())));
     column.setPrefWidth(width);
-    column.setSortable(false);
+    column.setReorderable(false);
+    Collator collator = Collator.getInstance(messages.locale());
+    collator.setStrength(Collator.SECONDARY);
+    column.setComparator(collator::compare);
     return column;
   }
 
@@ -403,6 +411,7 @@ final class MainWindow {
     Long selection = preferredId != null ? preferredId : selected == null ? null : selected.id();
     List<Project> matches = ProjectService.search(projects, search.getText());
     table.getItems().setAll(matches);
+    table.sort();
     if (selection != null) {
       matches.stream()
           .filter(project -> project.id() == selection)
