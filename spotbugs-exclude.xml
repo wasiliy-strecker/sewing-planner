@@ -7,4 +7,10 @@
     <Method name="&lt;init&gt;"/>
     <Bug pattern="EI_EXPOSE_REP2"/>
   </Match>
+  <!-- Collection services intentionally share injected repository and file ports. -->
+  <Match>
+    <Class name="~de\.appfabrik\.naehplan\.application\.Collection(Export|Import)"/>
+    <Method name="&lt;init&gt;"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
 </FindBugsFilter>

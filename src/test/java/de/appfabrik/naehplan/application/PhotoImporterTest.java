@@ -22,8 +22,13 @@ class PhotoImporterTest {
     Path original = directory.resolve("Foto mit Umlaut Ö.txt");
     Files.write(original, expected);
     Photo photo = PhotoImporter.read(original);
+    assertArrayEquals(expected, Files.readAllBytes(original));
     Files.delete(original);
-    assertArrayEquals(expected, photo.bytes());
+    var decoded = javax.imageio.ImageIO.read(photo.openStream());
+    assertEquals(120, decoded.getWidth());
+    assertEquals(80, decoded.getHeight());
+    assertEquals(0xff, Byte.toUnsignedInt(photo.bytes()[0]));
+    assertEquals(photo, PhotoImporter.decode(photo.bytes()));
   }
 
   @Test

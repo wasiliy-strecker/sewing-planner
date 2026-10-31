@@ -9,7 +9,7 @@ import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.MemoryCacheImageInputStream;
 
-/** Bounded, content-based validation. Call outside the JavaFX thread. */
+/** Bounded validation and optimization of new file selections. Call outside the JavaFX thread. */
 public final class PhotoImporter {
   public static final int MAX_BYTES = 10 * 1024 * 1024;
   public static final int MAX_EDGE = 6000;
@@ -27,7 +27,7 @@ public final class PhotoImporter {
       }
       // Limit the actual read too, in case the file changes after the size check.
       try (var input = Files.newInputStream(path)) {
-        return decode(input.readNBytes(MAX_BYTES + 1));
+        return decode(input.readNBytes(MAX_BYTES + 1), true);
       }
     } catch (IOException | SecurityException exception) {
       throw new PhotoException(PhotoException.Code.READ, exception);
@@ -35,6 +35,11 @@ public final class PhotoImporter {
   }
 
   public static Photo decode(byte[] bytes) {
+    // Database reads and backup restores must retain the exact stored bytes.
+    return decode(bytes, false);
+  }
+
+  private static Photo decode(byte[] bytes, boolean optimize) {
     if (bytes.length > MAX_BYTES) {
       throw tooLarge();
     }
@@ -62,11 +67,19 @@ public final class PhotoImporter {
         boolean[] warning = {false};
         reader.addIIOReadWarningListener((source, message) -> warning[0] = true);
         var decoded = reader.read(0);
-        if (decoded == null || warning[0]) {
+        if (decoded == null) {
           throw invalid();
         }
-        decoded.flush();
-        return new Photo(bytes);
+        try {
+          if (warning[0]) {
+            throw invalid();
+          }
+          return optimize
+              ? PhotoOptimizer.optimize(decoded, PhotoOrientation.read(bytes, format))
+              : new Photo(bytes);
+        } finally {
+          decoded.flush();
+        }
       } finally {
         reader.dispose();
       }

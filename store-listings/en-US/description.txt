@@ -1,4 +1,4 @@
-NähPlan
+Sewing Planner
 
 Plan sewing projects with a name, fabric or material, color, storage location, and notes. One optional photo, three status values, and a simple checklist keep track of your work.
 

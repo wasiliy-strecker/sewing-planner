@@ -1,3 +1,7 @@
+Aktueller öffentlicher Name: **Sewing Planner**. Erstes Store-Release auf Deutsch.
+Die App startet bei fehlender Spracheinstellung auf Englisch. Bestehende
+Vorschauordner dokumentieren den damaligen Stand und wurden nicht neu erzeugt.
+
 # Internationalisierung und Linux-Vorschau
 
 NähPlan unterstützt de-DE, en-US, es-ES, fr-FR, it-IT und pt-BR. Der Umfang

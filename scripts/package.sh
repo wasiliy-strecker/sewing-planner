@@ -20,14 +20,15 @@ fi
 export PATH="$JAVA_HOME/bin:$PATH"
 cd "$ROOT"
 # Verification is a separate, documented step. Packaging still compiles current sources.
-./mvnw --batch-mode --no-transfer-progress package -DskipTests
+./mvnw --batch-mode --no-transfer-progress package -Dmaven.test.skip=true
 VERSION=$(./mvnw --quiet -Dstyle.color=never help:evaluate -Dexpression=project.version -DforceStdout)
 INPUT="$ROOT/target/package-input"
 MODULES="$ROOT/target/javafx-modules"
 IMAGE_DEST="$ROOT/target/app-image"
+APP_NAME='Sewing Planner'
 DIST="$ROOT/target/dist"
 # These are generated staging directories only. User data never lives here.
-rm -rf "$INPUT" "$MODULES" "$IMAGE_DEST"
+rm -rf "$INPUT" "$MODULES" "$IMAGE_DEST/$APP_NAME" "$IMAGE_DEST/$APP_NAME.app"
 mkdir -p "$INPUT/legal" "$MODULES" "$IMAGE_DEST" "$DIST"
 ./mvnw --batch-mode --no-transfer-progress dependency:copy-dependencies \
   -DincludeScope=runtime -DoutputDirectory="$INPUT"
@@ -44,9 +45,8 @@ for library in "$INPUT"/javafx-*.jar; do
     *) rm "$library" ;;
   esac
 done
-APP_NAME=NaehPlan
 common=(--name "$APP_NAME" --app-version "$VERSION" --vendor "Wasiliy Strecker"
-  --description "NähPlan – Nähprojekte mit Checkliste"
+  --description "Sewing Planner – deine lokale Projektsammlung"
   --input "$INPUT" --main-jar "naehplan-$VERSION.jar"
   --main-class de.appfabrik.naehplan.Launcher
   --module-path "$JAVA_HOME/jmods:$MODULES"
@@ -57,7 +57,7 @@ if [[ "$(uname -s)" == Linux ]]; then
   common+=(--icon "$ROOT/assets/branding/icon-256.png")
 fi
 if [[ "$(uname -s)" == Darwin ]]; then
-  common+=(--icon "$ROOT/assets/branding/icon.icns" --mac-package-identifier de.appfabrik.naehplan --mac-package-name NaehPlan)
+  common+=(--icon "$ROOT/assets/branding/icon.icns" --mac-package-identifier de.appfabrik.naehplan --mac-package-name "$APP_NAME")
 fi
 "$JAVA_HOME/bin/jpackage" "${common[@]}" --type app-image --dest "$IMAGE_DEST"
 if [[ "$(uname -s)" == Darwin ]]; then
@@ -76,7 +76,7 @@ if [[ "$PLATFORM" == linux ]]; then
   cp "$ROOT/scripts/install_desktop.py" "$APP_IMAGE/"
 fi
 ACTUAL_VERSION=$("$LAUNCHER" --version)
-if [[ "$ACTUAL_VERSION" != "NähPlan $VERSION" ]]; then
+if [[ "$ACTUAL_VERSION" != "Sewing Planner $VERSION" ]]; then
   printf 'Versionsprüfung des paketierten Launchers fehlgeschlagen.\n' >&2
   exit 1
 fi

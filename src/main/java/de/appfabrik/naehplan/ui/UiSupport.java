@@ -1,9 +1,11 @@
 package de.appfabrik.naehplan.ui;
 
+import de.appfabrik.naehplan.application.CollectionLimitException;
 import de.appfabrik.naehplan.application.PhotoException;
 import de.appfabrik.naehplan.application.StorageException;
 import de.appfabrik.naehplan.i18n.Messages;
 import java.util.Objects;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -12,8 +14,10 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 final class UiSupport {
   private UiSupport() {}
@@ -29,6 +33,9 @@ final class UiSupport {
   }
 
   static String message(Throwable failure, Messages messages) {
+    if (failure instanceof CollectionLimitException limit) {
+      return messages.text("limit." + limit.code().name());
+    }
     return failure instanceof StorageException
         ? messages.text("storage." + ((StorageException) failure).code().name())
         : failure instanceof PhotoException photo
@@ -47,6 +54,49 @@ final class UiSupport {
                               "/de/appfabrik/naehplan/icon-" + size + ".png"))
                       .toExternalForm()));
     }
+  }
+
+  static void centerAfterLayout(Stage stage) {
+    PauseTransition placement = new PauseTransition(Duration.millis(150));
+    PauseTransition reveal = new PauseTransition(Duration.millis(100));
+    // Native window decorations can change the size after the shown event.
+    Runnable schedulePlacement =
+        () -> {
+          reveal.stop();
+          placement.playFromStart();
+        };
+    placement.setOnFinished(
+        event -> {
+          if (!stage.isShowing()) {
+            return;
+          }
+          Window owner = stage.getOwner();
+          var screens =
+              Screen.getScreensForRectangle(
+                  owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight());
+          var bounds =
+              (screens.isEmpty() ? Screen.getPrimary() : screens.getFirst()).getVisualBounds();
+          double x = owner.getX() + (owner.getWidth() - stage.getWidth()) / 2;
+          double y = owner.getY() + (owner.getHeight() - stage.getHeight()) / 2;
+          stage.setX(Math.max(bounds.getMinX(), Math.min(x, bounds.getMaxX() - stage.getWidth())));
+          stage.setY(Math.max(bounds.getMinY(), Math.min(y, bounds.getMaxY() - stage.getHeight())));
+          if (stage.getOpacity() == 0) {
+            reveal.playFromStart();
+          }
+        });
+    reveal.setOnFinished(event -> stage.setOpacity(1));
+    stage.widthProperty().addListener(observable -> schedulePlacement.run());
+    stage.heightProperty().addListener(observable -> schedulePlacement.run());
+    stage.setOnShown(
+        event -> {
+          stage.sizeToScene();
+          schedulePlacement.run();
+        });
+    stage.setOnHidden(
+        event -> {
+          placement.stop();
+          reveal.stop();
+        });
   }
 
   static void textMenu(TextInputControl control, Messages messages) {

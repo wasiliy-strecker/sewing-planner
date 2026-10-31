@@ -61,7 +61,7 @@ def main():
     if not (packaged / "checks.txt").is_file():
         raise RuntimeError("Missing successful packaged launcher checks")
     if package_manifest["package_sha256"] != file_hashes(
-        ROOT / "target/app-image/NaehPlan"
+        ROOT / "target/app-image/Sewing Planner"
     ):
         raise RuntimeError("The package changed after verification")
     destination.mkdir(parents=True)
@@ -98,7 +98,7 @@ def main():
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
     )
     (destination / "LIESMICH.txt").write_text(
-        "NähPlan – Linux-Vorschau in sechs Sprachen\n\n"
+        "Sewing Planner – Linux-Vorschau in sechs Sprachen\n\n"
         "24 echte Bildschirmaufnahmen mit synthetischen Beispieldaten.\n"
         "Plattform: Linux, JavaFX, isolierter virtueller Xvfb-Bildschirm.\n"
         "Die Aufnahmen sind eine Vorschau und keine Windows-Store-Abnahme.\n\n"

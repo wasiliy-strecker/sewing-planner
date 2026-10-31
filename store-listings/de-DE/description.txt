@@ -1,4 +1,4 @@
-NähPlan
+Sewing Planner
 
 Plane deine Nähprojekte mit Name, Stoff oder Material, Farbe, Aufbewahrungsort und Notizen. Ein optionales Foto, die drei Statuswerte und eine einfache Checkliste halten deinen Arbeitsstand fest.
 

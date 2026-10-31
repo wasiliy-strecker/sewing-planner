@@ -7,6 +7,7 @@ import de.appfabrik.naehplan.domain.Project;
 import de.appfabrik.naehplan.domain.ProjectDraft;
 import de.appfabrik.naehplan.domain.ProjectStatus;
 import de.appfabrik.naehplan.i18n.Messages;
+import de.appfabrik.naehplan.persistence.PhotoDirectoryPreferences;
 import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
@@ -39,7 +40,8 @@ final class ProjectEditor {
   private final Stage stage = new Stage();
   private final TextField name = new TextField();
   private final TextField material = new TextField();
-  private final TextField color = new TextField();
+  private final ProjectColorField color;
+  private final PhotoDirectoryPreferences photoDirectories;
   private final TextField location = new TextField();
   private final ComboBox<ProjectStatus> status = new ComboBox<>();
   private final TextArea note = new TextArea();
@@ -67,8 +69,11 @@ final class ProjectEditor {
       ProjectService service,
       AsyncTasks tasks,
       Consumer<Project> onSaved,
-      Messages messages) {
+      Messages messages,
+      PhotoDirectoryPreferences photoDirectories) {
     this.messages = messages;
+    this.photoDirectories = photoDirectories;
+    color = new ProjectColorField(existing == null ? "" : existing.color(), messages);
     preview = new PhotoPreview(232, 170, messages);
     preview.setId("editor-photo");
     save.setText(messages.text("action.save"));
@@ -90,7 +95,6 @@ final class ProjectEditor {
     if (existing != null) {
       name.setText(existing.name());
       material.setText(existing.material());
-      color.setText(existing.color());
       location.setText(existing.location());
       note.setText(existing.note());
     }
@@ -106,8 +110,7 @@ final class ProjectEditor {
     hint.getStyleClass().add("muted");
     hint.setWrapText(true);
     UiSupport.icon(stage);
-    for (var field :
-        new javafx.scene.control.TextInputControl[] {name, material, color, location, note}) {
+    for (var field : new javafx.scene.control.TextInputControl[] {name, material, location, note}) {
       UiSupport.textMenu(field, messages);
     }
     validation.setId("name-validation");
@@ -115,12 +118,10 @@ final class ProjectEditor {
     cancel.setId("cancel-project");
     name.setId("project-name");
     material.setId("project-material");
-    color.setId("project-color");
     location.setId("project-location");
     note.setId("project-note");
     name.setPromptText(messages.text("editor.namePrompt"));
     material.setPromptText(messages.text("field.optional"));
-    color.setPromptText(messages.text("editor.colorPrompt"));
     location.setPromptText(messages.text("editor.locationPrompt"));
     note.setPromptText(messages.text("editor.notePrompt"));
     note.setWrapText(true);
@@ -196,6 +197,7 @@ final class ProjectEditor {
           }
         });
     stage.setScene(scene);
+    UiSupport.centerAfterLayout(stage);
     stage.setOnCloseRequest(
         event -> {
           event.consume();
@@ -217,7 +219,7 @@ final class ProjectEditor {
     };
   }
 
-  private static VBox field(String text, javafx.scene.control.Control control) {
+  private static VBox field(String text, javafx.scene.Node control) {
     Label label = new Label(text);
     label.setLabelFor(control);
     label.getStyleClass().add("field-label");
@@ -225,6 +227,7 @@ final class ProjectEditor {
   }
 
   void show() {
+    stage.setOpacity(0);
     stage.show();
     Platform.runLater(name::requestFocus);
   }
@@ -237,7 +240,7 @@ final class ProjectEditor {
     return new Input(
         name.getText(),
         material.getText(),
-        color.getText(),
+        color.value(),
         location.getText(),
         note.getText(),
         photo,
@@ -251,6 +254,10 @@ final class ProjectEditor {
     }
     FileChooser chooser = new FileChooser();
     chooser.setTitle(messages.text("photo.chooserTitle"));
+    var initialDirectory = photoDirectories.initialDirectory();
+    if (initialDirectory != null) {
+      chooser.setInitialDirectory(initialDirectory.toFile());
+    }
     chooser
         .getExtensionFilters()
         .add(
@@ -262,21 +269,34 @@ final class ProjectEditor {
                 "*.JPG",
                 "*.JPEG",
                 "*.PNG"));
-    File selected = chooser.showOpenDialog(stage);
+    File selected;
+    try {
+      selected = chooser.showOpenDialog(stage);
+    } catch (IllegalArgumentException unavailableDirectory) {
+      // A removable directory can disappear between validation and the native dialog.
+      chooser.setInitialDirectory(null);
+      selected = chooser.showOpenDialog(stage);
+    }
     if (selected == null) {
       return;
     }
     setBusy(true, messages.text("photo.checking"));
     error.setVisible(false);
+    var selectedPath = selected.toPath();
     tasks.submit(
         () -> {
-          Photo imported = PhotoImporter.read(selected.toPath());
-          return new ImportedPhoto(imported, PhotoPreview.decode(imported));
+          boolean directorySaved = photoDirectories.remember(selectedPath);
+          Photo imported = PhotoImporter.read(selectedPath);
+          return new ImportedPhoto(imported, PhotoPreview.decode(imported), directorySaved);
         },
         imported -> {
           photo = imported.photo();
           preview.showImage(imported.image());
           setBusy(false, "");
+          if (!imported.directorySaved()) {
+            error.setText(messages.text("photo.directoryNotSaved"));
+            error.setVisible(true);
+          }
         },
         failure -> {
           setBusy(false, "");
@@ -380,5 +400,5 @@ final class ProjectEditor {
       ProjectStatus status,
       List<ChecklistEditor.StepInput> steps) {}
 
-  private record ImportedPhoto(Photo photo, Image image) {}
+  private record ImportedPhoto(Photo photo, Image image, boolean directorySaved) {}
 }

@@ -1,4 +1,4 @@
-NähPlan
+Sewing Planner
 
 Planifica tus proyectos de costura con nombre, tela o material, color, ubicación y notas. Una foto opcional, tres estados y una lista de pasos permiten seguir tu trabajo.
 

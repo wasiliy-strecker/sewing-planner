@@ -6,6 +6,7 @@ import de.appfabrik.naehplan.application.StorageException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
@@ -40,12 +41,17 @@ class MessagesTest {
           expected.getFormatsByArgumentIndex().length,
           actual.getFormatsByArgumentIndex().length,
           key);
-      String output =
-          new Messages(language).text(key, key.startsWith("count.") ? 2 : "Élise's {book}", 42);
-      // Count patterns require numbers rather than the synthetic title.
-      if (!key.startsWith("count.")) {
-        assertFalse(output.contains("{0}"), key);
+      var formats = actual.getFormatsByArgumentIndex();
+      Object[] arguments = new Object[formats.length];
+      for (int i = 0; i < arguments.length; i++) {
+        assertEquals(
+            expected.getFormatsByArgumentIndex()[i] instanceof NumberFormat,
+            formats[i] instanceof NumberFormat,
+            key);
+        arguments[i] = formats[i] instanceof NumberFormat ? 42 : "Élise's {book}";
       }
+      String output = new Messages(language).text(key, arguments);
+      assertFalse(output.contains("{0}"), key);
     }
   }
 

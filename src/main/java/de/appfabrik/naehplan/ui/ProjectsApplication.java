@@ -1,10 +1,14 @@
 package de.appfabrik.naehplan.ui;
 
+import de.appfabrik.naehplan.application.CollectionExport;
+import de.appfabrik.naehplan.application.CollectionImport;
 import de.appfabrik.naehplan.application.ProjectService;
 import de.appfabrik.naehplan.i18n.AppLanguage;
 import de.appfabrik.naehplan.i18n.Messages;
 import de.appfabrik.naehplan.persistence.AppDataDirectory;
+import de.appfabrik.naehplan.persistence.JsonCollectionFile;
 import de.appfabrik.naehplan.persistence.LanguagePreferences;
+import de.appfabrik.naehplan.persistence.PhotoDirectoryPreferences;
 import de.appfabrik.naehplan.persistence.SqliteProjectRepository;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -19,14 +23,15 @@ public final class ProjectsApplication extends Application {
   private Messages messages;
   private Path directory;
   private LanguagePreferences preferences;
-  private String choice = AppLanguage.AUTOMATIC;
+  private PhotoDirectoryPreferences photoDirectories;
+  private String choice = AppLanguage.ENGLISH.tag();
   private boolean languageReadFailed;
   private boolean invalidDirectory;
 
   @Override
   public void init() {
     Locale systemLocale = Locale.getDefault();
-    messages = new Messages(AppLanguage.detect(systemLocale));
+    messages = new Messages(AppLanguage.ENGLISH);
     try {
       String configured = getParameters().getNamed().get("data-dir");
       if (configured != null && configured.isBlank()) {
@@ -34,6 +39,7 @@ public final class ProjectsApplication extends Application {
       }
       directory = configured == null ? AppDataDirectory.current() : Path.of(configured);
       preferences = new LanguagePreferences(directory);
+      photoDirectories = new PhotoDirectoryPreferences(directory);
       try {
         choice = preferences.load();
       } catch (IOException exception) {
@@ -54,7 +60,7 @@ public final class ProjectsApplication extends Application {
               Alert.AlertType.ERROR,
               messages.text("start.error"),
               new ButtonType(messages.text("action.close")));
-      alert.setTitle("NähPlan");
+      alert.setTitle("Sewing Planner");
       alert.setHeaderText(messages.text("start.title"));
       UiSupport.style(alert.getDialogPane().getScene());
       UiSupport.icon((Stage) alert.getDialogPane().getScene().getWindow());
@@ -62,9 +68,22 @@ public final class ProjectsApplication extends Application {
       javafx.application.Platform.exit();
       return;
     }
-    ProjectService service =
-        new ProjectService(new SqliteProjectRepository(directory.resolve("naehplan.db")));
-    new MainWindow(stage, service, tasks, messages, preferences, choice, languageReadFailed).show();
+    var repository = new SqliteProjectRepository(directory.resolve("naehplan.db"));
+    ProjectService service = new ProjectService(repository);
+    var exports = new CollectionExport(repository, new JsonCollectionFile());
+    var imports = new CollectionImport(repository, new JsonCollectionFile());
+    new MainWindow(
+            stage,
+            service,
+            exports,
+            imports,
+            tasks,
+            messages,
+            preferences,
+            photoDirectories,
+            choice,
+            languageReadFailed)
+        .show();
   }
 
   @Override

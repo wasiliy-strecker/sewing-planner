@@ -1,6 +1,6 @@
 # Verwendete Komponenten
 
-NähPlan verwendet OpenJFX unter GPLv2 mit Classpath Exception und SQLite
+Sewing Planner verwendet OpenJFX unter GPLv2 mit Classpath Exception und SQLite
 JDBC von Xerial unter Apache License 2.0 und BSD-2-Clause. SQLite selbst ist
 Public Domain. Die eingebettete Java-Laufzeit unterliegt den Lizenzbedingungen
 der beim Bauen gewählten JDK-Distribution. Die aktuelle Build-Basis ist
@@ -44,7 +44,7 @@ Die Linux-Prüfung ist keine Lizenz- oder Signaturabnahme eines Windows-Pakets.
 
 Maven, Spotless, SpotBugs und JUnit sind Entwicklungswerkzeuge und werden nicht
 in das App-Image aufgenommen. Dieses Dokument vergibt keine Lizenz für den
-eigenen NähPlan-Quellcode.
+eigenen Sewing Planner-Quellcode.
 
 ## Schrift der Benutzeroberfläche
 
@@ -60,3 +60,9 @@ Lizenz, fester Quellstand und SHA-256 stehen unter
 `third-party-licenses/noto-sans-cjk/`. Die Lizenz liegt außerdem bei den
 Schriftressourcen im App-JAR. Pakethelfer übernehmen die Hinweise nach
 `legal/noto-sans-cjk/`. Die Schrift wird nicht systemweit installiert.
+
+## JSON-Sicherung
+
+Gson 2.13.2 und Error Prone Annotations 2.41.0 werden unverändert unter Apache License 2.0 verwendet. Die Lizenzen liegen in `third-party-licenses/gson-LICENSE` und `third-party-licenses/error-prone-annotations-LICENSE` und werden in die App-Pakete übernommen.
+Quellen: [Gson](https://github.com/google/gson/tree/gson-parent-2.13.2)
+und [Error Prone](https://github.com/google/error-prone/tree/v2.41.0).

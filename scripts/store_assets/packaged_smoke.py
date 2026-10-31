@@ -2,6 +2,8 @@
 """Exercise the actual Linux jpackage launcher with isolated synthetic data and native input."""
 
 import argparse
+from io import BytesIO
+from PIL import Image
 import hashlib
 import json
 import os
@@ -31,8 +33,8 @@ def main():
     args = parser.parse_args()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=False)
-    package = ROOT / "target/app-image/NaehPlan"
-    launcher = package / "bin/NaehPlan"
+    package = ROOT / "target/app-image/Sewing Planner"
+    launcher = package / "bin/Sewing Planner"
     runtime_release = (package / "lib/runtime/release").read_text()
     if "jdk.localedata" not in runtime_release:
         raise AssertionError("Packaged runtime must include regional locale data")
@@ -205,7 +207,7 @@ def main():
                         stdout=log,
                         stderr=log,
                     )
-                win = window("NähPlan")
+                win = window("Sewing Planner")
                 xdo("windowmove", "--sync", win, 0, 0)
                 xdo("windowfocus", "--sync", win)
                 time.sleep(1.5)
@@ -253,15 +255,19 @@ def main():
             shot("02-native-photo-import.png")
             xdo("windowfocus", "--sync", editor)
             key("ctrl+s")
-            expected_photo = source.read_bytes()
+            original_photo = source.read_bytes()
             deadline = time.monotonic() + 10
             while True:
                 with sqlite3.connect(database) as db:
                     saved = db.execute(
                         "SELECT name, photo, status FROM projects WHERE id=1"
                     ).fetchone()
-                if saved == ("Sac café – ação", expected_photo, "finished"):
-                    break
+                if saved and saved[0] == "Sac café – ação" and saved[2] == "finished":
+                    if saved[1] and saved[1].startswith(b"\xff\xd8"):
+                        with Image.open(BytesIO(saved[1])) as image:
+                            assert max(image.size) <= 1600
+                        assert source.read_bytes() == original_photo
+                        break
                 if time.monotonic() > deadline:
                     raise AssertionError(
                         "Packaged UI did not save Unicode text and replacement photo"
@@ -281,7 +287,7 @@ def main():
                 "Editing preserves checklist UUIDs, Unicode text, completion and position gaps"
             )
             source.unlink()
-            click(main_window, 880, 750)
+            click(main_window, 800, 744)
             dialog = window("Langue")
             click(dialog, 190, 160)
             key("Home", "Down", "Down", "Return")

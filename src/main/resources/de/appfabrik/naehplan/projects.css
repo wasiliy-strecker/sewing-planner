@@ -60,3 +60,9 @@
 .completed-step { -fx-text-fill: #68616b; }
 .open-step { -fx-text-fill: #3d3540; }
 .check-box { -fx-padding: 6px; }
+
+.project-color-picker { -fx-color-label-visible: false; -fx-background-color: white; -fx-background-radius: 6px; -fx-border-color: #cbd2c8; -fx-border-radius: 6px; -fx-padding: 9px 8px; -fx-cursor: hand; }
+.project-color-picker:focused { -fx-border-color: -fx-focus-color; }
+.color-clear { -fx-padding: 7px 11px; -fx-font-size: 18px; }
+.color-clear:focused { -fx-padding: 5px 9px; }
+.color-code { -fx-font-family: "Monospaced"; -fx-font-size: 12px; -fx-text-fill: #253c34; }

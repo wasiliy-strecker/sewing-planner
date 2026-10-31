@@ -10,7 +10,7 @@ public final class Launcher {
   public static void main(String[] args) {
     if (args.length == 1 && "--version".equals(args[0])) {
       String version = Launcher.class.getPackage().getImplementationVersion();
-      System.out.println("NähPlan " + (version == null ? "development" : version));
+      System.out.println("Sewing Planner " + (version == null ? "development" : version));
       return;
     }
     Application.launch(ProjectsApplication.class, args);

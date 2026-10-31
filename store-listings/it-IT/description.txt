@@ -1,4 +1,4 @@
-NähPlan
+Sewing Planner
 
 Pianifica i progetti di cucito con nome, tessuto o materiale, colore, posizione e note. Una foto facoltativa, tre stati e una lista delle fasi tengono traccia del lavoro.
 

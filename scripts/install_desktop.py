@@ -10,8 +10,8 @@ import sys
 import tempfile
 
 APP_ID = "de.appfabrik.naehplan"
-APP_NAME = "NähPlan"
-LAUNCHER = "NaehPlan"
+APP_NAME = "Sewing Planner"
+LAUNCHER = "Sewing Planner"
 WINDOW_CLASS = "de.appfabrik.naehplan.ui.ProjectsApplication"
 MARKER = "X-AppFabrik-Managed=true"
 

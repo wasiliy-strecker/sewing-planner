@@ -122,7 +122,8 @@ Inhalte. Originaldateien bleiben unverändert.
 Erst erfolgreicher Import und erfolgreiche JavaFX-Decodierung ersetzen das
 Entwurfsfoto. `PhotoPreview` verwirft verspätete Ergebnisse per Generationszähler.
 Eine neue Auswahl kann dadurch kein Foto eines vorher ausgewählten Projekts
-erhalten. EXIF-Rotation und besondere Farbprofile werden nicht aufbereitet.
+erhalten. Neue Fotoauswahlen berücksichtigen die EXIF-Ausrichtung und werden als
+optimierte sRGB-Kopie gespeichert. Bestehende Bildbytes bleiben unverändert.
 
 ## Im Bewerbungsgespräch erklären
 
@@ -151,3 +152,33 @@ Regionale Zahlen und Sortierung folgen dieser Wahl. `LanguagePreferences` speich
 die Einstellung atomar neben der Datenbank. UI-Fehler verwenden Meldungsschlüssel.
 App-ID, SQLite-Schema und UUIDs bleiben unverändert. Checklisten und Fotos werden
 weiterhin mit den Texten und Statuscodes in einer Transaktion gespeichert.
+
+## Sammlungstransfer und Fotooptimierung, 31. Oktober 2026
+
+`PhotoImporter.read` optimiert neue Dateiauswahlen über `PhotoOptimizer` und
+`PhotoOrientation`. `decode` erhält bestehende Datenbank- und Sicherungsbytes.
+`PhotoDirectoryPreferences` verwaltet die Navigationseinstellung app-lokal.
+`ProjectColorField` bewahrt Alttexte bis zur bewussten Farbauswahl.
+`UiSupport.centerAfterLayout` positioniert Dialoge vor dem Sichtbarwerden.
+Ein Eingabefilter sperrt das Hauptfenster beim Editorstart ohne Disable-Blinken.
+
+`CollectionExport`, `CollectionImport`, `CollectionFile` und
+`CollectionImportRepository` bilden app-lokale Ports ohne gemeinsame Runtime.
+`JsonCollectionFile` prüft Formatversion, Schlüssel, Typen, Unicode, Bilder,
+Eintragszahl und tatsächliche UTF-8-Dateigröße. `CollectionLimits` verwendet
+in beiden Richtungen dieselben Grenzen. SQLite begrenzt Neuanlagen innerhalb
+der INSERT-Anweisung. Der gesamte ergänzende Import einschließlich Endprüfung
+liegt in einer Transaktion. Fehler rollen alle Änderungen zurück.
+
+Die Erkennung vorhandener Kopien berücksichtigt sämtliche Texte, Fotobytes
+und den stabilen Statusschlüssel. Ein Zähler erhält die Anzahl gleicher Kopien
+im Export. Fotos bleiben bei Export und Wiederherstellung bytegleich.
+
+Checklisten werden mit UUID, Text, Boolean und expliziter Position gesichert.
+Beim Import werden Anzahl, eindeutige UUIDs und aufsteigende Positionen geprüft.
+Inhalt und Positionen gehen in den Duplikatvergleich ein. Vorhandene UUIDs
+werden für neue Kopien bei Bedarf ersetzt, vorhandene Schritte bleiben stabil.
+Die Kandidatensuche begrenzt sich auf IDs, die vor Importbeginn existierten.
+Damit gelten gerade eingefügte Projekte mit anderen Checklisten nicht als
+bereits vorhandene leere Checkliste. Projekte und Schritte werden gemeinsam
+in derselben Transaktion eingefügt.

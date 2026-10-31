@@ -1,7 +1,12 @@
 package de.appfabrik.naehplan.persistence;
 
+import de.appfabrik.naehplan.application.CollectionImportRepository;
+import de.appfabrik.naehplan.application.CollectionLimitException;
+import de.appfabrik.naehplan.application.CollectionLimits;
+import de.appfabrik.naehplan.application.ImportResult;
 import de.appfabrik.naehplan.application.PhotoException;
 import de.appfabrik.naehplan.application.PhotoImporter;
+import de.appfabrik.naehplan.application.ProjectImportSource;
 import de.appfabrik.naehplan.application.ProjectRepository;
 import de.appfabrik.naehplan.application.StorageException;
 import de.appfabrik.naehplan.domain.ChecklistStep;
@@ -10,21 +15,27 @@ import de.appfabrik.naehplan.domain.Project;
 import de.appfabrik.naehplan.domain.ProjectDraft;
 import de.appfabrik.naehplan.domain.ProjectStatus;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.sqlite.SQLiteConfig;
 
 /** Opens and closes one JDBC connection per operation. No connection escapes this class. */
-public final class SqliteProjectRepository implements ProjectRepository {
+public final class SqliteProjectRepository
+    implements ProjectRepository, CollectionImportRepository {
   private final Path database;
 
   public SqliteProjectRepository(Path database) {
@@ -99,33 +110,36 @@ public final class SqliteProjectRepository implements ProjectRepository {
   @Override
   public List<Project> findAll() {
     try (Connection connection = connect()) {
-      // Both tables must come from the same snapshot. Photos stay lazy.
       connection.setAutoCommit(false);
-      Map<Long, List<ChecklistStep>> steps = readSteps(connection);
-      try (var statement = connection.createStatement();
-          var result =
-              statement.executeQuery(
-                  "SELECT id, name, material, color, location, note, status, photo IS NOT NULL AS has_photo FROM projects")) {
-        List<Project> projects = new ArrayList<>();
-        while (result.next()) {
-          projects.add(
-              new Project(
-                  result.getLong("id"),
-                  result.getString("name"),
-                  result.getString("material"),
-                  result.getString("color"),
-                  result.getString("location"),
-                  result.getString("note"),
-                  result.getBoolean("has_photo"),
-                  ProjectStatus.fromStoredValue(result.getString("status")),
-                  steps.getOrDefault(result.getLong("id"), List.of())));
-        }
-        return List.copyOf(projects);
-      }
+      return readProjects(connection);
     } catch (IllegalArgumentException exception) {
       throw new StorageException(StorageException.Code.STATUS, exception);
     } catch (SQLException exception) {
       throw failure(exception);
+    }
+  }
+
+  private static List<Project> readProjects(Connection connection) throws SQLException {
+    Map<Long, List<ChecklistStep>> steps = readSteps(connection);
+    try (var statement = connection.createStatement();
+        var result =
+            statement.executeQuery(
+                "SELECT id, name, material, color, location, note, status, photo IS NOT NULL AS has_photo FROM projects")) {
+      List<Project> projects = new ArrayList<>();
+      while (result.next()) {
+        projects.add(
+            new Project(
+                result.getLong("id"),
+                result.getString("name"),
+                result.getString("material"),
+                result.getString("color"),
+                result.getString("location"),
+                result.getString("note"),
+                result.getBoolean("has_photo"),
+                ProjectStatus.fromStoredValue(result.getString("status")),
+                steps.getOrDefault(result.getLong("id"), List.of())));
+      }
+      return List.copyOf(projects);
     }
   }
 
@@ -152,6 +166,164 @@ public final class SqliteProjectRepository implements ProjectRepository {
       }
     }
     return steps;
+  }
+
+  @Override
+  public ImportResult importProjects(ProjectImportSource source) {
+    try (Connection connection = connect()) {
+      connection.setAutoCommit(false);
+      try {
+        var available = new HashMap<String, Integer>();
+        int[] counts = new int[2];
+        long originalCount;
+        long originalMaxId;
+        try (var statement = connection.createStatement();
+            var result =
+                statement.executeQuery("SELECT count(*), COALESCE(max(id), 0) FROM projects")) {
+          result.next();
+          originalCount = result.getLong(1);
+          originalMaxId = result.getLong(2);
+        }
+        var storedSteps = readSteps(connection);
+        MessageDigest digest = sha256();
+        try (var existing =
+                connection.prepareStatement(
+                    "SELECT id FROM projects WHERE name = ? AND material = ? AND color = ?"
+                        + " AND location = ? AND note = ? AND photo IS ? AND status = ? AND id <= ?");
+            var insert =
+                connection.prepareStatement(
+                    "INSERT INTO projects (name, material, color, location, note, photo, status) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id")) {
+          source.read(
+              draft -> {
+                CollectionLimits.validate(draft);
+                String key = fingerprint(draft, digest);
+                try {
+                  Integer copies = available.get(key);
+                  if (copies == null) {
+                    bind(existing, draft);
+                    existing.setLong(8, originalMaxId);
+                    try (var result = existing.executeQuery()) {
+                      copies = 0;
+                      while (result.next()) {
+                        if (sameSteps(
+                            storedSteps.getOrDefault(result.getLong(1), List.of()),
+                            draft.steps())) {
+                          copies++;
+                        }
+                      }
+                    }
+                  }
+                  if (copies > 0) {
+                    available.put(key, copies - 1);
+                    counts[1]++;
+                  } else {
+                    if (originalCount + counts[0] >= CollectionLimits.MAX_ENTRIES) {
+                      throw new CollectionLimitException(CollectionLimitException.Code.ENTRIES);
+                    }
+                    available.put(key, 0);
+                    bind(insert, draft);
+                    long importedId;
+                    try (var result = insert.executeQuery()) {
+                      if (!result.next()) {
+                        throw new SQLException("Incomplete collection import");
+                      }
+                      importedId = result.getLong(1);
+                    }
+                    replaceSteps(connection, importedId, importedSteps(connection, draft.steps()));
+                    counts[0]++;
+                  }
+                } catch (SQLException exception) {
+                  throw failure(exception);
+                }
+              });
+        }
+        var result = new ImportResult(counts[0], counts[1], readProjects(connection));
+        connection.commit();
+        return result;
+      } catch (SQLException | RuntimeException exception) {
+        connection.rollback();
+        throw exception;
+      }
+    } catch (SQLException exception) {
+      throw failure(exception);
+    }
+  }
+
+  private static MessageDigest sha256() {
+    try {
+      return MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException impossible) {
+      throw new IllegalStateException("SHA-256 is required by the Java runtime", impossible);
+    }
+  }
+
+  private static String fingerprint(ProjectDraft draft, MessageDigest digest) {
+    digest.reset();
+    for (String value :
+        List.of(
+            draft.name(),
+            draft.material(),
+            draft.color(),
+            draft.location(),
+            draft.note(),
+            draft.status().storedValue())) {
+      byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
+      digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(bytes.length).array());
+      digest.update(bytes);
+    }
+    byte[] photo = draft.photo() == null ? null : draft.photo().bytes();
+    digest.update(
+        ByteBuffer.allocate(Integer.BYTES).putInt(photo == null ? -1 : photo.length).array());
+    if (photo != null) {
+      digest.update(photo);
+    }
+    digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(draft.steps().size()).array());
+    for (var step : draft.steps()) {
+      byte[] bytes = step.text().getBytes(StandardCharsets.UTF_8);
+      digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(bytes.length).array());
+      digest.update(bytes);
+      digest.update((byte) (step.completed() ? 1 : 0));
+      digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(step.position()).array());
+    }
+    return HexFormat.of().formatHex(digest.digest());
+  }
+
+  private static boolean sameSteps(List<ChecklistStep> left, List<ChecklistStep> right) {
+    if (left.size() != right.size()) {
+      return false;
+    }
+    for (int i = 0; i < left.size(); i++) {
+      var a = left.get(i);
+      var b = right.get(i);
+      if (!a.text().equals(b.text())
+          || a.completed() != b.completed()
+          || a.position() != b.position()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private static List<ChecklistStep> importedSteps(Connection connection, List<ChecklistStep> steps)
+      throws SQLException {
+    var imported = new ArrayList<ChecklistStep>();
+    var allocated = new java.util.HashSet<UUID>();
+    try (var existing = connection.prepareStatement("SELECT 1 FROM checklist_steps WHERE id = ?")) {
+      for (var step : steps) {
+        UUID id = step.id();
+        while (true) {
+          existing.setString(1, id.toString());
+          try (var result = existing.executeQuery()) {
+            if (!result.next() && allocated.add(id)) {
+              break;
+            }
+          }
+          id = UUID.randomUUID();
+        }
+        imported.add(new ChecklistStep(id, step.text(), step.completed(), step.position()));
+      }
+    }
+    return List.copyOf(imported);
   }
 
   @Override
@@ -184,20 +356,22 @@ public final class SqliteProjectRepository implements ProjectRepository {
   }
 
   private Project save(Long id, ProjectDraft draft) {
+    CollectionLimits.validate(draft);
     try (Connection connection = connect()) {
       connection.setAutoCommit(false);
       try {
         long projectId;
         String sql =
             id == null
-                ? "INSERT INTO projects (name, material, color, location, note, photo, status) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id"
+                ? "INSERT INTO projects (name, material, color, location, note, photo, status) SELECT ?, ?, ?, ?, ?, ?, ? WHERE (SELECT count(*) FROM projects) < ? RETURNING id"
                 : "UPDATE projects SET name = ?, material = ?, color = ?, location = ?, note = ?, photo = ?, status = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
           bind(statement, draft);
           if (id == null) {
+            statement.setInt(8, CollectionLimits.MAX_ENTRIES);
             try (ResultSet result = statement.executeQuery()) {
               if (!result.next()) {
-                throw new StorageException(StorageException.Code.CREATE);
+                throw new CollectionLimitException(CollectionLimitException.Code.ENTRIES);
               }
               projectId = result.getLong(1);
             }

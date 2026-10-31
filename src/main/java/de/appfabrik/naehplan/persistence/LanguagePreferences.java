@@ -26,7 +26,7 @@ public final class LanguagePreferences {
       String stored = Files.readString(file, StandardCharsets.UTF_8).strip();
       return AppLanguage.isChoice(stored) ? stored : AppLanguage.ENGLISH.tag();
     } catch (NoSuchFileException missing) {
-      return AppLanguage.AUTOMATIC;
+      return AppLanguage.ENGLISH.tag();
     }
   }
 

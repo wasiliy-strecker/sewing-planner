@@ -11,6 +11,7 @@ public final class PhotoException extends RuntimeException {
     CORRUPT,
     INVALID,
     SIZE,
+    OPTIMIZE,
     DISPLAY
   }
 

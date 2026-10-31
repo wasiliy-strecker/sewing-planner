@@ -1,16 +1,64 @@
-# NähPlan
+# Sewing Planner
 
 Deine Ideen. Stich für Stich. Verwalte kleine Nähprojekte mit Projektname,
 Stoff oder Material, Farbe, Aufbewahrungsort, mehrzeiliger Notiz, einem
 optionalen Foto und dem Status **Geplant**, **Angefangen** oder **Fertig**.
 Die Checkliste hält deine Arbeitsschritte fest. Alles bleibt lokal.
 
-![NähPlan mit ausschließlich synthetischen Testdaten](docs/screenshots/naehplan.png)
+![Sewing Planner mit ausschließlich synthetischen Testdaten](docs/screenshots/naehplan.png)
 
-Stufe 4 der Java-Reihe BücherRegal → GarnBox → StrickProjekt → NähPlan.
+Stufe 4 der Java-Reihe BücherRegal → GarnBox → StrickProjekt → Sewing Planner.
 KostümPlan bleibt die fünfte Reservestufe. Gegenüber StrickProjekt kommt
 genau eine Hauptfunktion hinzu: die Checkliste pro Projekt.
 Material ist Freitext ohne Verbindung zu anderen Apps.
+
+## Verbesserungen vom 31. Oktober 2026
+
+Öffentlicher Name in allen Sprachen: **Sewing Planner**. Paketkennung und Datenpfade
+bleiben unverändert. Neue Installationen starten auf Englisch, unabhängig von
+der Systemsprache. Eine vorhandene Sprachwahl einschließlich „Automatisch“
+bleibt erhalten. Die erste Store-Veröffentlichung wird auf Deutsch vorbereitet.
+
+Hinzufügen und Bearbeiten öffnen sich zentriert über dem Hauptfenster.
+Beim Laden des Editors blinkt die Tabelle nicht mehr. „Neu laden“ entfällt.
+Speichern, Löschen und Import aktualisieren die Liste automatisch.
+
+Die optionale Farbe wird über einen Farbwähler gewählt. Die Liste zeigt ein
+Farbfeld und einen auch bei Auswahl lesbaren Hexwert. Bestehende Farbtexte
+bleiben erhalten, bis bewusst eine Farbe gewählt oder entfernt wird.
+
+Neu gewählte oder ersetzte Fotos werden proportional auf höchstens 1600 Pixel
+an der längsten Seite verkleinert. Kleine Bilder werden nicht vergrößert.
+Bilder ohne Transparenz werden JPEG mit Qualität 85 %, transparente Bilder PNG.
+EXIF-Ausrichtung wird auf die Pixel angewendet, Quellmetadaten werden nicht
+übernommen. Die Eingabegrenzen bleiben 10 MiB, 6000 Pixel je Seite und
+16 Millionen Pixel. Originaldateien, bestehende Fotos und aus JSON
+wiederhergestellte Fotobytes bleiben unverändert.
+Die Fotoauswahl merkt sich den letzten bestätigten Ordner appweit und über
+Neustarts hinweg in `photo-directory.txt`. Bei nicht erreichbarem Ordner wird
+der Bilder- oder Benutzerordner verwendet. Abbrechen ändert die Einstellung
+nicht. Die Ordnereinstellung gehört nicht zur Sammlungssicherung.
+
+„Exportieren“ und „Importieren“ in der Fußleiste übertragen die gesamte
+Sammlung als JSON, unabhängig von Suchfilter oder Auswahl. Enthalten sind
+Texte, Hexfarben oder alte Farbtexte, Fotos als Base64 und der Projektstatus.
+Auch Checklisten mit Text, Erledigt-Zustand, Reihenfolge und Schrittkennungen
+sind enthalten. Wenn eine Schrittkennung bereits verwendet wird, bekommt nur
+die neu ergänzte Kopie eine neue Kennung. Bestehende Projekte bleiben erhalten.
+
+Das app-eigene Format heißt `sewing-planner.collection`, Version 1.
+Import ergänzt atomar. Identische Kopien werden einschließlich ihrer Anzahl
+berücksichtigt, sodass wiederholter Import keine weiteren Duplikate erzeugt.
+Ungültige Dateien oder Fotos führen zum vollständigen Abbruch. Andere
+App-Formate werden nicht als eigene Sicherung eingelesen. Vorhandene
+Exportdateien werden nicht überschrieben.
+
+Es gelten höchstens 10.000 Projekte, 1.048.576 Zeichen je Textfeld und 256 MiB
+je JSON-Datei. Pro Projekt sind höchstens 10.000 Schritte zulässig.
+Auch der Export prüft diese Grenzen vor Übernahme der Zieldatei.
+Bereits vorhandene größere Sammlungen werden nicht gekürzt. Ihre Einträge
+bleiben lesbar, bearbeitbar und löschbar. Für eine vollständige Dateisicherung
+außerhalb dieser Exportgrenzen die App schließen und die Datenbank kopieren.
 
 ## Starten
 
@@ -42,10 +90,10 @@ Im vorhandenen Linux-Workspace findet `./scripts/run.sh` auch das JDK unter
 `$HOME/.local/share/naehplan/jdk-21.0.13+9`. Das lokale Paket mit eingebetteter Laufzeit startet so:
 
 ```bash
-./target/app-image/NaehPlan/bin/NaehPlan
+"./target/app-image/Sewing Planner/bin/Sewing Planner"
 ```
 
-Der sichtbare Produktname lautet NähPlan. Paketdateien, Launcher und
+Der sichtbare Produktname lautet Sewing Planner. Paketdateien, Launcher und
 Datenverzeichnisse verwenden die ASCII-Schreibweise `NaehPlan` beziehungsweise
 `naehplan`. Die App-Kennung ist `de.appfabrik.naehplan`.
 
@@ -84,7 +132,7 @@ Projekttreffer. Eine leere Suche zeigt alle Projekte.
 ## Foto
 
 Genau ein JPEG oder PNG auswählen, ansehen, ersetzen oder entfernen.
-NähPlan prüft den tatsächlichen Bildinhalt und speichert eine eigene Kopie
+Sewing Planner prüft den tatsächlichen Bildinhalt und speichert eine eigene Kopie
 in SQLite. Die Quelldatei wird niemals verändert oder gelöscht. Das Foto bleibt
 nach Verschieben oder Löschen der Quelle erhalten.
 
@@ -126,7 +174,7 @@ Isolierter Teststart mit einem eigenen absoluten Pfad:
 
 ```bash
 ./scripts/run.sh '-Djavafx.args=--data-dir=/tmp/naehplan-test'
-./target/app-image/NaehPlan/bin/NaehPlan --data-dir=/tmp/naehplan-test
+"./target/app-image/Sewing Planner/bin/Sewing Planner" --data-dir=/tmp/naehplan-test
 ```
 
 ## Prüfen und verstehen
@@ -201,7 +249,7 @@ Anwendungseintrag demselben Icon zu.
 Nach dem Linux-App-Image-Bau aus diesem App-Verzeichnis registrieren:
 
 ```bash
-python3 target/app-image/NaehPlan/install_desktop.py
+python3 "target/app-image/Sewing Planner/install_desktop.py"
 ```
 
 Danach lässt sich die App über ihren Namen in der Ubuntu-Anwendungsübersicht
