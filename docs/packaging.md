@@ -7,7 +7,7 @@ Sichtbarer Produktname: NähPlan. Die Launcher- und Paketnamen verwenden
 
 Zuerst `./mvnw verify` beziehungsweise `.\mvnw.cmd verify` erfolgreich ausführen.
 Paketierung kompiliert den aktuellen Stand, wiederholt jedoch nicht die Tests.
-Ein vollständiges JDK 21 mit `javac`, `jlink` und `jpackage` ist erforderlich.
+Ein vollständiges Eclipse Temurin JDK 21.0.13+9 mit `javac`, `jlink` und `jpackage` ist erforderlich.
 JavaFX-Bibliotheken und JDK müssen zur Zielarchitektur passen.
 
 Das App-Image enthält die App, SQLite JDBC und eine erzeugte Java-Laufzeit.
@@ -28,7 +28,7 @@ startbares Verzeichnis mit Laufzeit. Ein Linux-Store-Release ist nicht geplant.
 
 ## Windows x64
 
-Auf Windows mit einem x64-JDK 21 und PowerShell ausführen. Für die EXE-Erzeugung
+Auf Windows mit einem x64-Temurin-JDK 21.0.13+9 und PowerShell ausführen. Für die EXE-Erzeugung
 wird WiX Toolset 3.14.1 benötigt, dessen `bin`-Verzeichnis im `PATH` liegt.
 
 ```powershell
@@ -45,7 +45,7 @@ außerhalb des Installationsverzeichnisses.
 
 ## macOS Intel und Apple Silicon
 
-Auf der jeweiligen Mac-Architektur mit passendem JDK 21 ausführen:
+Auf der jeweiligen Mac-Architektur mit passendem Temurin-JDK 21.0.13+9 ausführen:
 
 ```bash
 ./mvnw verify
@@ -85,9 +85,13 @@ Windows und macOS sind lokal noch nicht nativ geprüft. Vor einer Veröffentlich
 sind Installation, Start, Schrift, Tastenkürzel, Foto-, Status- und Checklistenspeicherung und Updates auf
 Zielsystemen abzunehmen. Eine EXE oder DMG allein belegt keine Store-Eignung.
 
-Für den Microsoft Store bleiben Produktregistrierung, konkrete Distributionsform,
-Signierung, Metadaten und Zertifizierung offen. Die Entscheidung zwischen einem
-unterstützten Desktop-Installer-Weg und MSIX gehört zum späteren Releaseauftrag.
+Für den Microsoft Store ist MSIX vorgesehen, für den kostenlosen GitHub-Download
+bleibt die EXE aus demselben Anwendungscode vorgesehen. Die MSIX-Paketierung
+ist noch nicht implementiert. Reale Partner-Center-Identität, Publisher,
+Signierungsnachweise, Windows-Installation, Updates, WACK, finale Windows-Bilder
+und Store-Angaben bleiben offen. Es erfolgt keine automatische Migration
+zwischen den beiden Installationswegen. MSIX-Datenpfade und Deinstallation
+müssen mit synthetischen Daten separat geprüft werden.
 
 Für den Mac App Store bleiben Apple-Entwickleridentität, App-Sandbox,
 Entitlements für Java und native Bibliotheken, Signierung des vollständigen
@@ -111,3 +115,31 @@ Paketbezeichnung bleibt `NaehPlan`, der sichtbare Produktname `NähPlan`.
 Eigenes PNG/ICO und sechs UTF-8-Kataloge sind enthalten. Der isolierte
 Pakettest startet ohne Entwicklungs-JDK und prüft Bestandsschema, Foto, Status,
 Schritt-UUIDs und Sprachwechsel. Siehe [Vorschauablauf](internationalization.md).
+
+## Lokale Vorbereitung vom 31. Oktober 2026
+
+Maven und beide CI-Workflows verwenden Temurin 21.0.13+9. Die global vorhandene
+Java-Installation bleibt bestehen. App-Images enthalten zusätzlich
+`legal/USER_GUIDE.md` mit Datenpfaden und `legal/BUILD_JAVA_RELEASE.txt` mit der
+originalen Herkunftsdatei des Build-JDK. Der bestehende explizite Windows-ICO-Pfad
+bleibt erhalten. Ein vorbereitetes Skript ist kein Windows-Ausführungsnachweis.
+Die geänderten CI-Workflows wurden nicht gestartet.
+
+Vor einer öffentlichen Binärlieferung die genauen vollständigen Laufzeitquellen
+und Begleitinformationen gemäß `THIRD_PARTY_NOTICES.md` zuordnen und zugänglich
+bereitstellen. Diese Vorbereitung veröffentlicht weder Pakete noch Quellen.
+
+Der Offline-Dialog enthält die Datenschutzerklärung in sechs Sprachen. Der Helfer
+`scripts/export_privacy.sh` erzeugt die gleichen Texte für die Store-Einreichung.
+Die MSIX-Anleitung erlaubt eine URL oder den direkten Datenschutztext.
+Bei der tatsächlichen Einreichung die angebotenen Felder prüfen. Die Angaben
+zur Verarbeitung müssen auch die lokal ausgewählten Fotos berücksichtigen.
+
+Quellen, erneut gelesen am 31. Oktober 2026:
+
+- [Microsoft: Distributionswege, Signierung und Updates](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/choose-distribution-path)
+- [Microsoft: Datenschutztext und Supportangaben](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/support-info)
+
+Nächste Schritte: aktuelle Windows-Builds und echte Store-Identität vorbereiten,
+MSIX erstellen, Installation und Update mit Datenbestand prüfen, danach WACK,
+Windows-Aufnahmen, Lizenzbegleitmaterial und Store-Metadaten abschließen.

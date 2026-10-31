@@ -4,3 +4,4 @@ Stati Pianificato, Iniziato e Finito
 Lista con le tue fasi di lavoro
 Ricerca nei progetti e nelle fasi
 Archiviazione locale e sei lingue
+Leggere l’informativa sulla privacy offline nell’app

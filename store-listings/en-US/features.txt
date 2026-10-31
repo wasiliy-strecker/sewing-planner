@@ -4,3 +4,4 @@ Planned, Started, and Finished status
 Checklist with your own steps
 Search project details and steps
 Local storage and six languages
+Read the privacy policy offline inside the app

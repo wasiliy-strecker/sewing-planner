@@ -33,7 +33,7 @@ ein lokal entpacktes Xvfb zeigen. Jeder Helfer startet einen eigenen Bildschirm
 Temporäre Daten unter `target/gui-work/` sind ausdrücklich als synthetisch markiert.
 
 ```bash
-export JAVA_HOME="$HOME/.local/jdk-21"
+export JAVA_HOME="$HOME/.local/share/naehplan/jdk-21.0.13+9"
 export PATH="$JAVA_HOME/bin:$PATH"
 ./mvnw spotless:apply
 ./mvnw verify -Dnaehplan.uiTests=true dependency:build-classpath -Dmdep.outputFile=target/gui-classpath.txt
@@ -123,3 +123,12 @@ Die 24 Bilder sind echte Linux-Vorschauen. Windows-Paketierung, Installation,
 Updateprüfung, Skalierung, native Dialoge und endgültige Windows-Screenshots
 bleiben offen. macOS-Abnahme, Store-Identitäten, Signierung und Einreichung
 gehören zu späteren Releaseaufträgen. Diese Lieferung ist keine Store-Abnahme.
+
+## Datenschutzübernahme vom 31. Oktober 2026
+
+Die Info-Schaltfläche, Dialogtexte und Datenschutzerklärung stehen in allen
+sechs Sprachkatalogen. App-Dialog und Datenschutztextexport verwenden dieselben
+Ressourcen. `assemble.py` ergänzt nach den vorhandenen Prüfungen den Ordner
+`Privacy` mit sechs UTF-8-Dateien. Frühere Vorschauordner behalten ihren damaligen
+Quellstand. Für die aktuelle UI wurden auf Nutzerwunsch keine neuen Aufnahmen
+oder GUI-Prüfungen erzeugt. Neue Bilder und native Abnahme bleiben offen.

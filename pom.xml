@@ -37,7 +37,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId><artifactId>maven-enforcer-plugin</artifactId><version>3.6.3</version>
         <executions><execution><goals><goal>enforce</goal></goals><configuration><rules>
-          <requireJavaVersion><version>[21,22)</version></requireJavaVersion>
+          <requireJavaVersion><version>[21.0.13,21.0.14)</version></requireJavaVersion>
+          <requireJavaVendor><includes><include>Eclipse Adoptium</include></includes></requireJavaVendor>
+          <requireProperty>
+            <property>java.runtime.version</property>
+            <regex>21\.0\.13\+9(-LTS)?</regex>
+            <regexMessage>Use Eclipse Temurin 21.0.13+9 for this app.</regexMessage>
+          </requireProperty>
           <requireMavenVersion><version>[3.9.0,)</version></requireMavenVersion>
           <dependencyConvergence/>
         </rules></configuration></execution></executions>

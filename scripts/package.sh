@@ -10,8 +10,8 @@ if [[ "$PACKAGE_TYPE" == dmg && "$(uname -s)" != Darwin ]]; then
   printf 'DMG-Pakete müssen auf macOS gebaut werden.\n' >&2
   exit 1
 fi
-if [[ -z "${JAVA_HOME:-}" && -x "$HOME/.local/jdk-21/bin/javac" ]]; then
-  export JAVA_HOME="$HOME/.local/jdk-21"
+if [[ -z "${JAVA_HOME:-}" && -x "$HOME/.local/share/naehplan/jdk-21.0.13+9/bin/javac" ]]; then
+  export JAVA_HOME="$HOME/.local/share/naehplan/jdk-21.0.13+9"
 fi
 if [[ -z "${JAVA_HOME:-}" || ! -x "$JAVA_HOME/bin/javac" || ! -x "$JAVA_HOME/bin/jpackage" ]]; then
   printf 'JAVA_HOME muss auf ein vollständiges JDK 21 mit jpackage zeigen.\n' >&2
@@ -33,6 +33,8 @@ mkdir -p "$INPUT/legal" "$MODULES" "$IMAGE_DEST" "$DIST"
   -DincludeScope=runtime -DoutputDirectory="$INPUT"
 cp "target/naehplan-$VERSION.jar" "$INPUT/"
 cp THIRD_PARTY_NOTICES.md "$INPUT/legal/"
+cp README.md "$INPUT/legal/USER_GUIDE.md"
+cp "$JAVA_HOME/release" "$INPUT/legal/BUILD_JAVA_RELEASE.txt"
 cp -R third-party-licenses/. "$INPUT/legal/"
 # Keep JavaFX on the module path. The application and JDBC remain on the classpath.
 for library in "$INPUT"/javafx-*.jar; do

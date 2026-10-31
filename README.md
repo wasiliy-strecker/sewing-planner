@@ -14,6 +14,14 @@ Material ist Freitext ohne Verbindung zu anderen Apps.
 
 ## Starten
 
+Build und CI verwenden Eclipse Temurin 21.0.13+9. Maven prüft Hersteller,
+Version und Buildnummer. Für direkte Maven-Aufrufe auf diesem Rechner:
+
+```bash
+export JAVA_HOME="$HOME/.local/share/naehplan/jdk-21.0.13+9"
+export PATH="$JAVA_HOME/bin:$PATH"
+```
+
 Ein vollständiges JDK 21 in `JAVA_HOME` und dessen `bin` im `PATH` verwenden.
 Der Maven Wrapper lädt Maven und Abhängigkeiten beim ersten Start.
 Die fertige App benötigt weder Konto noch Netzwerkzugriff.
@@ -31,7 +39,7 @@ Windows PowerShell:
 ```
 
 Im vorhandenen Linux-Workspace findet `./scripts/run.sh` auch das JDK unter
-`$HOME/.local/jdk-21`. Das lokale Paket mit eingebetteter Laufzeit startet so:
+`$HOME/.local/share/naehplan/jdk-21.0.13+9`. Das lokale Paket mit eingebetteter Laufzeit startet so:
 
 ```bash
 ./target/app-image/NaehPlan/bin/NaehPlan
@@ -159,3 +167,27 @@ Bestehende Daten, Fotos, Status und Checklisten bleiben erhalten.
 [Internationalisierung](docs/internationalization.md) beschreibt sechs Store-Textfassungen,
 echte Bildschirmaufnahmen und geprüfte Vorschauordner ohne Lieferarchive.
 Windows-Abnahme und Veröffentlichung bleiben separat.
+
+## Datenschutz und Fokusrahmen
+
+„Info“ öffnet die vollständige Datenschutzerklärung offline in der ausgewählten
+App-Sprache. Der Dialog ist scrollbar, schreibgeschützt und kopierbar.
+Escape oder „Schließen“ führen zurück. Er wird erst nach der Positionierung
+sichtbar, damit die anfängliche Korrektur der Fensterposition verborgen bleibt.
+Die Erklärung beschreibt die tatsächlich gespeicherten Texte, Fotos und die
+jeweiligen Projektfunktionen. Originalfotos werden nicht verändert.
+
+Löschschaltflächen erhalten einen roten Fokusrahmen. Die übrigen Schaltflächen
+behalten die jeweilige App-Farbe. Die Auswahlfläche der Tabelle bleibt sichtbar,
+der zusätzliche Rahmen der fokussierten Tabellenzeile ist transparent.
+
+Die sechs identischen Texte für Partner Center lassen sich aus den Ressourcen
+in einen neuen Ausgabeordner exportieren:
+
+```bash
+./scripts/export_privacy.sh target/privacy-texts
+```
+
+Ein vorhandener Ausgabeordner wird nicht überschrieben. Die vorhandenen
+Prüfbedingungen für Vorschau-Lieferungen bleiben bestehen. Der neue Datenschutz-
+ordner wird erst mit einer erneut geprüften Lieferung erzeugt.

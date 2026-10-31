@@ -1,5 +1,46 @@
 # Prüfbericht
 
+## Datenschutz und lokale Paketvorbereitung, 31. Oktober 2026
+
+Aus BücherRegal übernommen: Info-Menü, vollständige Offline-Datenschutzerklärung
+in sechs Sprachen, größerer scrollbar-kopierbarer Dialog, Zentrierung nach nativen
+Größenkorrekturen und verzögertes Einblenden. Die Texte beschreiben die tatsächlichen
+Daten dieser App. Fotos bleiben lokale Datenbankkopien. Status und Arbeitsschritte
+werden nur in den Apps mit diesen Funktionen genannt. KostümPlan beschreibt
+zusätzlich seinen PDF-Export. Es wurde kein JSON-Import/-Export ergänzt.
+
+Destruktive Schaltflächen haben einen roten Fokusrahmen. Die übrigen Aktionen
+behalten die jeweilige App-Farbe. Die Auswahlfläche der Tabelle bleibt erhalten,
+der zusätzliche Fokusrahmen der Tabellenzeile ist transparent.
+
+Tatsächlich ausgeführt: Formatter, Java-Compiler und Linux-App-Image-Bau mit
+Temurin 21.0.13+9. Tests waren durch `-Dmaven.test.skip=true` ausdrücklich
+ausgeschaltet. Der Pakethelfer führte nur seinen Launcher-Versionsaufruf aus.
+Der Datenschutztextexport erzeugte sechs Dateien aus den produktiven Ressourcen.
+Keine Tests, kein `verify`, keine Fehleranalyse und kein GUI-Prüflauf dieses
+Standes. Frühere Prüfergebnisse gelten ausschließlich für die damaligen Stände.
+
+Buildprotokoll: `target/portfolio-privacy-build.log`.
+Datenschutztexte: `build/releases/privacy/2026-10-31`.
+Die Pakete enthalten die eigene Laufzeit, Lizenzhinweise, Bedienungsanleitung
+und die originale Herkunftsdatei des Build-JDK. Die geänderten CI-Workflows und
+native Windows-/macOS-Paketierung wurden nicht ausgeführt. Keine neuen Store-
+Screenshots erzeugt. Frühere Lieferungen wurden nicht überschrieben.
+
+Manuelle Abnahme durch den Nutzer bleibt offen:
+
+1. Einen Eintrag wählen und mit Tab „Bearbeiten“ sowie „Löschen“ fokussieren.
+   Nur der destruktive Fokusrahmen ist rot. Die Zeilenauswahl bleibt sichtbar.
+2. Unter „Info“ die Erklärung öffnen. Positionierung und Einblenden beurteilen,
+   scrollen, Text kopieren und über Escape sowie „Schließen“ zurückkehren.
+3. Den Dialog nach einem Sprachwechsel und Neustart in den sechs Sprachen prüfen.
+   Texte, Fotos und die vorhandenen Status-/Schrittdaten müssen erhalten bleiben.
+4. Die bisherigen Kernfunktionen der App einschließlich Fotoauswahl und
+   gegebenenfalls Status, Checkliste oder PDF manuell abnehmen.
+
+Eine Store-Freigabe ist damit nicht belegt. Identität, MSIX, Signierung,
+Installation, Updates, WACK und Windows-Aufnahmen bleiben offen.
+
 ## Internationalisierung, 29. Oktober 2026
 
 `./mvnw verify -Dnaehplan.uiTests=true` besteht auf einem eigenen Xvfb-Display

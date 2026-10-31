@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: '21.0.13+9'
           cache: maven
       - name: Verify Java, SQLite and JavaFX dialogs on Linux
         if: runner.os == 'Linux'

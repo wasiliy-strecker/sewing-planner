@@ -18,8 +18,8 @@ LOCALES = ("de-DE", "en-US", "es-ES", "fr-FR", "it-IT", "pt-BR")
 
 
 def source_hashes():
-    files = [ROOT / "pom.xml", ROOT / "mvnw"]
-    for folder in ("src", "assets", "scripts", ".mvn", "store-listings"):
+    files = [ROOT / "pom.xml", ROOT / "mvnw", ROOT / "THIRD_PARTY_NOTICES.md"]
+    for folder in ("src", "assets", "scripts", ".mvn", "store-listings", "third-party-licenses"):
         files.extend(
             path
             for path in (ROOT / folder).rglob("*")
@@ -32,7 +32,7 @@ def source_hashes():
 
 
 def java_command():
-    java_home = Path(os.environ.get("JAVA_HOME", str(Path.home() / ".local/jdk-21")))
+    java_home = Path(os.environ.get("JAVA_HOME", str(Path.home() / ".local/share/naehplan/jdk-21.0.13+9")))
     java = java_home / "bin/java"
     if not java.is_file():
         raise RuntimeError("Set JAVA_HOME to a full JDK 21")
