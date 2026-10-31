@@ -19,6 +19,7 @@ final class UiSupport {
   private UiSupport() {}
 
   static void style(Scene scene) {
+    UiFonts.load();
     scene
         .getStylesheets()
         .add(

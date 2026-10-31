@@ -1,5 +1,36 @@
 # Prüfbericht
 
+## CJK-Schriftdarstellung, 31. Oktober 2026
+
+Der gemeldete Beispieltitel „Bücher 日本語 📚“ ist in der synthetischen
+BücherRegal-Datenbank vollständig gespeichert. Die drei Kästchen betreffen die
+Darstellung. Alle fünf Apps verwenden jetzt eine app-lokal mitgelieferte,
+explizit geladene Schrift Noto Sans CJK JP 2.004 mit Regular und Bold.
+Die Änderung gilt für Tabellen, Eingaben und die übrige gestylte Oberfläche.
+Gespeicherte Texte und Sprachwahl werden nicht umgeschrieben.
+
+Die eingesehene native Linux-Schriftauswahl von OpenJFX 21.0.11 filtert bei der
+Fallback-Ermittlung auf TrueType. Die hier installierten Noto-CJK-Schriften
+verwenden CFF-Outlines. Die primäre, direkt geladene OTF-Schrift umgeht diesen
+Fallback für die enthaltenen Zeichen. Andere Unicode-Zeichen und die Darstellung
+von Emojis hängen weiterhin von der JavaFX-Ersatzschrift des Zielsystems ab.
+
+Quelle: [OpenJFX 21.0.11, fontpath_linux.c](https://github.com/openjdk/jfx21u/blob/21.0.11%2B4/modules/javafx.graphics/src/main/native-font/fontpath_linux.c).
+Die Einbindung nutzt die öffentliche API
+[Font.loadFont](https://openjfx.io/javadoc/21/javafx.graphics/javafx/scene/text/Font.html).
+
+Formatter und Java-Kompilierung mit Paketbau erfolgreich. Pro App wurde
+`./mvnw spotless:apply package -Dmaven.test.skip=true` mit dem eigenen
+Temurin 21.0.13+9 ausgeführt. Protokoll: `target/ui-font-build.log`.
+Die vorhandenen Linux-App-Images wurden mit dem neuen App-JAR und den
+zusätzlichen Lizenzhinweisen aktualisiert. Die Java-Laufzeit blieb unverändert.
+
+Auf Nutzerwunsch keine Tests, kein `verify` und keine automatisierte GUI-Abnahme.
+Manuell abzunehmen: den obigen Beispieltitel in Tabelle und Bearbeitungsdialog
+lesen, zusätzlich Umlaute und Akzente in den sechs UI-Sprachen ansehen und
+Dialoggrößen sowie fette Überschriften kontrollieren. In den anderen Apps dafür
+nur eigene temporäre Beispieldaten verwenden. Windows und macOS bleiben offen.
+
 ## Datenschutz und lokale Paketvorbereitung, 31. Oktober 2026
 
 Aus BücherRegal übernommen: Info-Menü, vollständige Offline-Datenschutzerklärung
