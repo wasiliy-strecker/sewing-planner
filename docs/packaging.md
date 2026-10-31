@@ -153,3 +153,38 @@ Es gibt keinen Schrift-Download zur Laufzeit und keine Systeminstallation.
 Herkunft und Prüfsummen stehen in `third-party-licenses/noto-sans-cjk/NOTICE.md`.
 Die Pakethelfer kopieren diesen Ordner in das Legal-Verzeichnis.
 Native Darstellung unter Windows und macOS ist weiterhin separat abzunehmen.
+
+## Plattform-Icons und Desktop-Zuordnung, 31. Oktober 2026
+
+Das vorhandene Motiv unter `assets/branding/icon-1024.png` bleibt die Grundlage.
+`scripts/prepare_icons.py` erzeugt mit Python 3 und Pillow zusätzliche PNG-Größen,
+ein ICO mit 16, 32, 48, 64, 128 und 256 Pixeln sowie ICNS bis 1024 Pixel.
+Die bisherigen Branding-Generatoren rufen diesen Schritt am Ende ihrer
+Icon-Erzeugung auf. Für normale Builds werden die eingecheckten Dateien genutzt.
+Pillow ist keine Laufzeitabhängigkeit der App.
+
+JavaFX erhält Fenstericons in sechs Größen. Auch Startfehler verwenden das
+App-Icon. Der Windows-Helfer übergibt das ICO ausdrücklich an App-Image und
+EXE-Installer. Der macOS-Helfer übergibt das ICNS an App-Bundle und DMG-Erzeugung.
+Bestehende Paket-IDs und Windows-Upgrade-UUIDs bleiben erhalten.
+
+Linux-App-Images enthalten `install_desktop.py` und `lib/app/desktop-icons/`.
+Der Installer schreibt ausschließlich in die XDG-Datenverzeichnisse des aktuellen
+Benutzers. Er registriert `de.appfabrik.naehplan.desktop`, PNG-/SVG-Icons im
+Hicolor-Verzeichnis und `StartupWMClass=de.appfabrik.naehplan.ui.ProjectsApplication`.
+Diese Klasse entspricht der vorhandenen JavaFX-Anwendung. Der native Launcher
+wird direkt aufgerufen, ohne Maven, Shell-Wrapper oder systemweites Java.
+Bereits vorhandene, nicht von diesem Helfer verwaltete Einträge werden erhalten.
+Die optionale Angabe `--data-dir` wird als eigenes Argument korrekt maskiert.
+Nach Verschieben des App-Images muss der Eintrag erneut registriert werden.
+
+Windows- und macOS-Iconanzeige sind erst mit den nativen Paketen abzunehmen.
+Die Dateien und Skriptänderungen allein ersetzen diese Abnahme nicht. Es wurden
+keine Store-Pakete veröffentlicht und keine CI-Workflows gestartet.
+
+Referenzen:
+
+- [JDK 21 jpackage: Plattformpakete und Icon-Option](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jpackage.html)
+- [Desktop Entry: Icon und StartupWMClass](https://specifications.freedesktop.org/desktop-entry/latest/recognized-keys.html)
+- [Desktop Entry: Maskierung von Exec-Argumenten](https://specifications.freedesktop.org/desktop-entry/latest/exec-variables.html)
+- [Apple: Hochauflösende App-Icons](https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html)

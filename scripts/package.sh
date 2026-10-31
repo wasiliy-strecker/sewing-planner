@@ -57,7 +57,7 @@ if [[ "$(uname -s)" == Linux ]]; then
   common+=(--icon "$ROOT/assets/branding/icon-256.png")
 fi
 if [[ "$(uname -s)" == Darwin ]]; then
-  common+=(--mac-package-identifier de.appfabrik.naehplan --mac-package-name NaehPlan)
+  common+=(--icon "$ROOT/assets/branding/icon.icns" --mac-package-identifier de.appfabrik.naehplan --mac-package-name NaehPlan)
 fi
 "$JAVA_HOME/bin/jpackage" "${common[@]}" --type app-image --dest "$IMAGE_DEST"
 if [[ "$(uname -s)" == Darwin ]]; then
@@ -68,6 +68,12 @@ else
   APP_IMAGE="$IMAGE_DEST/$APP_NAME"
   LAUNCHER="$APP_IMAGE/bin/$APP_NAME"
   PLATFORM=linux
+fi
+if [[ "$PLATFORM" == linux ]]; then
+  mkdir -p "$APP_IMAGE/lib/app/desktop-icons"
+  cp "$ROOT/assets/branding/"icon-*.png "$APP_IMAGE/lib/app/desktop-icons/"
+  cp "$ROOT/assets/branding/icon.svg" "$APP_IMAGE/lib/app/desktop-icons/"
+  cp "$ROOT/scripts/install_desktop.py" "$APP_IMAGE/"
 fi
 ACTUAL_VERSION=$("$LAUNCHER" --version)
 if [[ "$ACTUAL_VERSION" != "NähPlan $VERSION" ]]; then
@@ -82,7 +88,8 @@ esac
 if [[ "$PACKAGE_TYPE" == dmg ]]; then
   STAGING=$(mktemp -d "$ROOT/target/dmg.XXXXXX")
   "$JAVA_HOME/bin/jpackage" --type dmg --name "$APP_NAME" --app-version "$VERSION" \
-    --app-image "$APP_IMAGE" --dest "$STAGING" --vendor "Wasiliy Strecker"
+    --app-image "$APP_IMAGE" --dest "$STAGING" --vendor "Wasiliy Strecker" \
+    --icon "$ROOT/assets/branding/icon.icns"
   OUTPUT="$DIST/naehplan-$VERSION-$PLATFORM-$ARCHITECTURE.dmg"
   if [[ -e "$OUTPUT" ]]; then
     printf 'Das bereits vorhandene Paket wird nicht überschrieben: %s\n' "$OUTPUT" >&2

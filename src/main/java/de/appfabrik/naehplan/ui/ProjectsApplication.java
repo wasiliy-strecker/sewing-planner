@@ -57,6 +57,7 @@ public final class ProjectsApplication extends Application {
       alert.setTitle("NähPlan");
       alert.setHeaderText(messages.text("start.title"));
       UiSupport.style(alert.getDialogPane().getScene());
+      UiSupport.icon((Stage) alert.getDialogPane().getScene().getWindow());
       alert.showAndWait();
       javafx.application.Platform.exit();
       return;

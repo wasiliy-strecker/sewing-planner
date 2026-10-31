@@ -37,12 +37,16 @@ final class UiSupport {
   }
 
   static void icon(Stage stage) {
-    stage
-        .getIcons()
-        .add(
-            new Image(
-                Objects.requireNonNull(
-                    UiSupport.class.getResourceAsStream("/de/appfabrik/naehplan/icon-256.png"))));
+    for (int size : new int[] {16, 32, 48, 64, 128, 256}) {
+      stage
+          .getIcons()
+          .add(
+              new Image(
+                  Objects.requireNonNull(
+                          UiSupport.class.getResource(
+                              "/de/appfabrik/naehplan/icon-" + size + ".png"))
+                      .toExternalForm()));
+    }
   }
 
   static void textMenu(TextInputControl control, Messages messages) {

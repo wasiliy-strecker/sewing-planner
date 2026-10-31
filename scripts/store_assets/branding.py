@@ -2,6 +2,7 @@
 
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import cairo
@@ -59,6 +60,7 @@ def main():
         branding / "icon-256.png",
         ROOT / "src/main/resources/de/appfabrik/naehplan/icon-256.png",
     )
+    subprocess.run([sys.executable, str(ROOT / "scripts/prepare_icons.py")], check=True)
     photos = ROOT / "assets/store_demo/images"
     photos.mkdir(parents=True, exist_ok=True)
     shapes = {

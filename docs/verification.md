@@ -1,5 +1,29 @@
 # Prüfbericht
 
+## App-Icons auf den drei Desktop-Plattformen, 31. Oktober 2026
+
+Vorhandene Motive in zusätzliche Fenstergrößen, Windows-ICO und macOS-ICNS
+überführt. Fenster und Startfehler verwenden die App-Icons. Linux erhält einen
+benutzerspezifischen Anwendungseintrag mit passender JavaFX-Fensterklasse und
+Icons. Windows- und macOS-Pakethelfer verknüpfen die jeweiligen Icon-Dateien
+explizit mit Launcher/Bundle und Installer.
+
+Tatsächlich ausgeführt: Icon-Erzeugung mit Pillow, Formatter und Java-Paketbau
+mit `-Dmaven.test.skip=true`. Protokoll: `target/desktop-icons-build.log`.
+Vorhandene Linux-App-Images mit App-JAR, Icons, Desktop-Installer und Anleitung
+aktualisiert. Die Linux-Desktop-Registrierung wurde für das aktuelle Benutzerkonto
+ausgeführt. Keine vollständigen nativen Installer neu gebaut.
+
+Die Anwendung wurde in diesem Auftrag nicht gestartet. Der neue Menüeintrag
+verwendet den bisherigen Standarddatenpfad. Visuelle Abnahme bleibt offen.
+
+Auf Nutzerwunsch keine Tests, kein `verify` und keine automatisierten GUI-Prüfungen.
+Manuelle Abnahme: App über die Ubuntu-Anwendungsübersicht starten, eigenes Icon
+im Dock und beim Fensterwechsel ansehen, Dialoge öffnen und nach einem Neustart
+die Zuordnung kontrollieren. Windows separat in Explorer, Startmenü und Taskleiste
+prüfen, macOS separat im Finder, Dock und App-Umschalter. Native Windows-/macOS-
+Pakete und Signierungen wurden hier nicht erzeugt oder geprüft.
+
 ## CJK-Schriftdarstellung, 31. Oktober 2026
 
 Der gemeldete Beispieltitel „Bücher 日本語 📚“ ist in der synthetischen
