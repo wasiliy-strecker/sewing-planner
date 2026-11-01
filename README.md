@@ -264,7 +264,7 @@ Windows-Abnahme und Veröffentlichung bleiben separat.
 
 ## Datenschutz und Fokusrahmen
 
-„Info“ öffnet die vollständige Datenschutzerklärung offline in der ausgewählten
+„Info“ → „Datenschutz“ öffnet die vollständige Datenschutzerklärung offline in der ausgewählten
 App-Sprache. Der Dialog ist scrollbar, schreibgeschützt und kopierbar.
 Escape oder „Schließen“ führen zurück. Er wird erst nach der Positionierung
 sichtbar, damit die anfängliche Korrektur der Fensterposition verborgen bleibt.
@@ -305,3 +305,14 @@ Mit `--data-dir=/absoluter/pfad` kann der Eintrag eine bereits verwendete eigene
 Sammlung öffnen. Ohne diese Option gelten die normalen Datenpfade der App.
 Beim Verschieben des App-Images den Installer vom neuen Speicherort erneut
 aufrufen. Einen geöffneten Prozess anschließend regulär neu starten.
+
+## Informationen zur App
+
+Das Menü „Info“ bietet drei getrennte Fenster. „Über die App“ zeigt den
+Produktnamen, die gebaute Version, eine kurze Beschreibung und den Supportkontakt.
+„Datenschutz“ zeigt die vollständige Erklärung in der gewählten Sprache.
+„Lizenzen“ enthält die Hinweise und Originaltexte zu den Fremdkomponenten.
+Alle Inhalte sind offline verfügbar, kopierbar und schreibgeschützt.
+Überschriften und Erläuterungen sind in allen sechs Sprachen vorhanden.
+Rechtliche Originaltexte bleiben in ihrer Originalsprache. Weitere Hinweise
+der eingebetteten Java-Laufzeit bleiben in deren Lizenzordnern erhalten.

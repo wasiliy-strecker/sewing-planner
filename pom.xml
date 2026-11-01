@@ -28,6 +28,19 @@
     </dependency>
   </dependencies>
   <build>
+    <resources>
+      <resource><directory>src/main/resources</directory></resource>
+      <resource>
+        <directory>${project.basedir}</directory><targetPath>app-info</targetPath>
+        <includes><include>THIRD_PARTY_NOTICES.md</include><include>third-party-licenses/**</include></includes>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>${java.home}/legal/java.base</directory><targetPath>app-info/runtime</targetPath>
+        <includes><include>LICENSE</include><include>ASSEMBLY_EXCEPTION</include></includes><filtering>false</filtering>
+      </resource>
+      <resource><directory>src/main/app-info</directory><targetPath>app-info</targetPath><filtering>true</filtering></resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.14.1</version>

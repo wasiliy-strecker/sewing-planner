@@ -1,0 +1,14 @@
+/app-info/THIRD_PARTY_NOTICES.md
+/app-info/third-party-licenses/error-prone-annotations-LICENSE
+/app-info/third-party-licenses/gson-LICENSE
+/app-info/third-party-licenses/javafx-ADDITIONAL_LICENSE_INFO
+/app-info/third-party-licenses/javafx-ASSEMBLY_EXCEPTION
+/app-info/third-party-licenses/javafx-LICENSE
+/app-info/third-party-licenses/javafx-graphics/jpeg_fx.md
+/app-info/third-party-licenses/javafx-graphics/mesa3d.md
+/app-info/third-party-licenses/noto-sans-cjk/NOTICE.md
+/app-info/third-party-licenses/noto-sans-cjk/OFL.txt
+/META-INF/maven/org.xerial/sqlite-jdbc/LICENSE
+/META-INF/maven/org.xerial/sqlite-jdbc/LICENSE.zentus
+/app-info/runtime/LICENSE
+/app-info/runtime/ASSEMBLY_EXCEPTION

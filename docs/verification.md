@@ -1,5 +1,45 @@
 # Prüfbericht
 
+## Getrennte Info-Fenster, 1. November 2026
+
+„Info“ enthält jetzt „Über die App“, „Datenschutz“ und „Lizenzen“. Die kurze
+App-Information zeigt Sewing Planner, die beim Build eingesetzte Version und den
+Supportkontakt. Die bestehende vollständige Datenschutzerklärung einschließlich
+app-spezifischer Ergänzungen bleibt erhalten. Lizenzhinweise und Originaltexte
+werden aus eingebetteten Ressourcen geladen. SQLite-Hinweise stammen direkt
+aus dem JDBC-Archiv, die grundlegenden Java-Lizenztexte aus dem festgelegten JDK.
+Weitere Laufzeithinweise bleiben Bestandteil des installierten Runtime-Images.
+Es gibt weder einen Netzwerkaufruf noch einen Zugriff auf Nutzersammlungen
+für die Anzeige dieser Informationen.
+
+Die bestehende Dialogpositionierung, Sprachauswahl, Kopierbarkeit und
+Schreibsperre bleiben erhalten. Alle sechs Sprachen bieten dieselben drei
+Menüeinträge. Original-Lizenztexte werden nicht übersetzt oder verändert.
+
+Mit dem app-eigenen Eclipse Temurin 21.0.13+9 und isoliertem Xvfb geprüft:
+
+```bash
+./mvnw --batch-mode --no-transfer-progress spotless:apply verify dependency:build-classpath -Dmdep.outputFile=target/gui-classpath.txt -Dnaehplan.uiTests=true -Dprism.order=sw
+```
+
+208 Java-Tests ohne Fehler oder ausgelassene Fälle. Compiler-Lint, Enforcer,
+Spotless und SpotBugs bestanden. Die neuen Prüfungen kontrollieren Menüfolge,
+Zuordnung und Inhalt aller drei Dialoge, Schreibschutz, Schließen und sämtliche
+vorhandenen Lizenzdateien in allen sechs Sprachen. Originale CRLF-Zeilenenden
+in SQLite-Lizenzdateien werden von JavaFX für die Textanzeige normalisiert.
+Die eingebetteten Dateien selbst bleiben unverändert.
+
+Das Linux-App-Image wurde aus einer separaten Kopie der aktuellen Quellen
+gebaut. Vorhandene App-Images und laufende Nutzerfenster blieben erhalten.
+Die Klassen und Ressourcen im Paket stimmen mit dem geprüften Build überein.
+Der native Starter wurde mit einem eigenen Datenverzeichnis geöffnet und über
+die normale Fensterfunktion geschlossen. Der verwaltete Linux-Eintrag zeigt
+auf `target/local-info-app-image/Sewing Planner` und behält seine bisherigen Datenoptionen.
+Native Windows-/Mac-Abnahme, neue Store-Übergaben und Veröffentlichung gehören
+nicht zu dieser lokalen UI-Aufgabe. Keine Nutzerexporte in den Commit aufgenommen.
+
+Logs, GUI-Bilder und Paketnachweise: `target/info-dialogs/`.
+
 ## Mac-Beenden und Exportzugriff, 1. November 2026
 
 Cmd+Q kann für Hauptfenster und Editor mehrere Schließanfragen auslösen.

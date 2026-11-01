@@ -119,3 +119,11 @@ Persönliche Sammlungen und die geöffnete Nutzer-App bleiben unberührt.
 Die vorgesehene neue Apple-Kennung ist `de.appfabrik.sewingplanner`.
 Ihre Registrierung ist nicht bestätigt. Eine Umstellung bestehender technischer
 Kennungen ist kein Teil der Inhaltslieferung. Native Mac-Aufnahmen folgen separat.
+
+## Getrennte App-Informationen, 1. November 2026
+
+„Info“ enthält drei getrennte Einträge: Über die App, Datenschutz und Lizenzen.
+Alle eigenen Erläuterungen und Menütexte in den sechs vorhandenen Katalogen
+pflegen. Die vollständige Datenschutzerklärung bleibt identisch zum Textexport.
+Original-Lizenztexte unverändert einbetten. Neue Fremdkomponenten auch im
+app-lokalen Lizenzindex ergänzen. Versionsangaben stammen aus dem Maven-Build.
