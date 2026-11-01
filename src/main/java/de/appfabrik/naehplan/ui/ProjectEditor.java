@@ -61,6 +61,7 @@ final class ProjectEditor {
   private final ChecklistEditor checklist;
   private Photo photo;
   private boolean busy;
+  private final CloseRequests closeRequests = new CloseRequests(this::closeIfApproved);
 
   ProjectEditor(
       Window owner,
@@ -417,10 +418,21 @@ final class ProjectEditor {
   }
 
   void requestClose() {
-    if (busy) {
-      return;
+    requestClose(() -> {});
+  }
+
+  void requestClose(Runnable afterClose) {
+    if (!busy) {
+      closeRequests.request(afterClose);
     }
-    if (input().equals(original)
+  }
+
+  private boolean closeIfApproved() {
+    if (busy) {
+      return false;
+    }
+    if (!stage.isShowing()
+        || input().equals(original)
         || UiSupport.confirm(
             stage,
             messages.text("discard.title"),
@@ -428,7 +440,9 @@ final class ProjectEditor {
             messages.text("action.discard"),
             messages.text("action.keep"))) {
       stage.hide();
+      return true;
     }
+    return false;
   }
 
   private record Input(

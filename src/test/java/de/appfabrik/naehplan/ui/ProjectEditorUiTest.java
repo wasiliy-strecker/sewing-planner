@@ -42,7 +42,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,18 +65,7 @@ class ProjectEditorUiTest {
 
   @BeforeAll
   static void startToolkit() throws Exception {
-    var ready = new CountDownLatch(1);
-    Platform.startup(
-        () -> {
-          Platform.setImplicitExit(false);
-          ready.countDown();
-        });
-    assertTrue(ready.await(10, TimeUnit.SECONDS));
-  }
-
-  @AfterAll
-  static void stopToolkit() {
-    Platform.exit();
+    FxTestSupport.start();
   }
 
   @BeforeEach

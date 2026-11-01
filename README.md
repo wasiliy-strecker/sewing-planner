@@ -16,6 +16,15 @@ KostümPlan bleibt die fünfte Reservestufe. Gegenüber StrickProjekt kommt
 genau eine Hauptfunktion hinzu: die Checkliste pro Projekt.
 Material ist Freitext ohne Verbindung zu anderen Apps.
 
+## Mac-Korrekturen vom 1. November 2026
+
+Cmd+Q fragt bei offenen Änderungen einmal nach. „Weiterbearbeiten“ behält den
+Entwurf, „Verwerfen“ schließt die Anwendung. Laufendes Speichern bleibt geschützt.
+Beim JSON-Export auf dem Mac zuerst den Zielordner wählen und danach den
+Dateinamen eingeben. Diese Ordnerfreigabe ermöglicht den Export auch innerhalb
+der Mac-App-Store-Sandbox. Abbruch erstellt keine Datei. Die bestehenden Regeln
+zum Überschreiben bleiben erhalten. [Prüfung und Mac-Abnahme](docs/verification.md).
+
 ## Verbesserungen vom 31. Oktober 2026
 
 Öffentlicher Name in allen Sprachen: **Sewing Planner**. Paketkennung und Datenpfade

@@ -1,5 +1,52 @@
 # Prüfbericht
 
+## Mac-Beenden und Exportzugriff, 1. November 2026
+
+Cmd+Q kann für Hauptfenster und Editor mehrere Schließanfragen auslösen.
+Diese werden vor der Rückfrage gebündelt. „Weiterbearbeiten“ erhält den gesamten
+Entwurf und verwirft auch den ausstehenden Beenden-Wunsch. „Verwerfen“ schließt
+Editor und Hauptfenster. Ein unveränderter Editor benötigt keine Rückfrage.
+Das alleinige Schließen des Editors lässt das Hauptfenster geöffnet. Laufendes
+Speichern wird nicht unterbrochen. Implementierung und Tests bleiben app-lokal.
+
+Beim JSON-Export auf macOS zuerst einen Zielordner im nativen Dialog wählen,
+danach einen Dateinamen eingeben. Die Ordnerfreigabe umfasst auch temporäre
+Dateien für den atomaren Export. Der Ablauf gilt für jeden Mac-Start und benötigt
+keinen besonderen Store-Schalter. Unter Windows und Linux bleibt die bisherige
+Dateiauswahl erhalten. Pfadbestandteile, Kontrollzeichen und zu lange Dateinamen
+werden abgelehnt. Abbruch erzeugt keine Datei. Die neuen Texte sind in allen
+sechs Sprachen vorhanden. Bestehende Dateien behalten den bisherigen Schutz.
+
+Grundlage ist Apples dokumentierte Freigabe eines ausgewählten Ordners samt
+seinem Inhalt: [Dateizugriff in der App Sandbox](https://developer.apple.com/documentation/security/accessing-files-from-the-macos-app-sandbox).
+
+Der aktuelle Nutzerauftrag umfasst ausdrücklich die zuvor gefundenen Fehler.
+Die frühere Testzurückstellung einzelner Aufgaben gilt nicht für diese Korrektur.
+Mit Eclipse Temurin 21.0.13+9 auf einem eigenen Xvfb-/Openbox-Bildschirm ausgeführt:
+
+```bash
+./mvnw --batch-mode --no-transfer-progress spotless:apply verify -Dnaehplan.uiTests=true
+```
+
+196 Tests bestanden. Keine Fehler und keine übersprungenen Tests.
+Compiler-Lint, Enforcer, Spotless und SpotBugs bestanden. Protokoll:
+`target/mac-workflows-verify.log`. Sechs neue Beenden-Regressionen rufen den
+JavaFX-Glass-Handler auf, den macOS für Cmd+Q verwendet. Sie prüfen Verwerfen,
+Weiterbearbeiten, wiederholte Anfragen, unveränderte Entwürfe, das einzelne
+Editorfenster und einen gezielt verzögerten Speichervorgang.
+
+Weitere Regressionen prüfen den Dateinamendialog in sechs Sprachen, Abbruch,
+Korrektur ungültiger Namen, Unicode und die Bindung an den ausgewählten Ordner.
+Die bestehenden Sammlungstransfer- und Dateifehlerprüfungen bestehen weiterhin.
+
+Manuelle Mac-Abnahme bleibt erforderlich: Cmd+Q mit offenem Entwurf abbrechen
+und bestätigen. Während eines Speichervorgangs erneut versuchen. Beim Export
+Ordner und Dateiname auswählen, beide Abbruchwege prüfen und das Ergebnis
+außerhalb des App-Containers öffnen. Bei Store-Ausführung die Ordnerfreigabe
+mit einem frischen App-Start überprüfen. Linux-Prüfungen sind keine native
+Mac- oder Sandbox-Abnahme. Keine Store-Pakete, Veröffentlichung oder Änderung
+persönlicher Sammlungen. Bereits laufende Benutzerprozesse wurden nicht beendet.
+
 ## Deutsche Mac-Store-Inhalte ohne App-Build, 31. Oktober 2026
 
 Nach dem Vorbild von Knitting Projects 13 deutsche Felddateien und vier echte
