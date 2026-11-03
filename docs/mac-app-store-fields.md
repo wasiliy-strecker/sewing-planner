@@ -44,6 +44,18 @@ Kategorie Produktivität ist vorgesehen. Game Center wird nicht verwendet.
 Die Entscheidung zur Veröffentlichung erfolgt später in App Store Connect.
 Dieser Auftrag nimmt dort keine Änderungen vor.
 
+Stand 3. November 2026: Die aktuellen Store-Dateien verwenden die englische
+GitHub-Datenschutzerklärung. Die Beschreibung unterscheidet die offline
+nutzbare Projektverwaltung vom Browseraufruf. Für das Portal die Texte aus
+der neuen Übergabe verwenden. Frühere Lieferungen bleiben unverändert.
+„Anmeldung erforderlich“ ausschalten und eigene erreichbare Prüferkontakte
+eintragen. Nach der Eingabe auf der Versionsseite „Sichern“ wählen.
+Den Build nach dem Mac-Bau und Upload zuordnen. Die optionalen Sandbox-Angaben
+mit dem tatsächlich signierten Paket abgleichen. Auf „App-Datenschutz“ die
+`privacy-url.txt` eintragen, die Datenerfassung für die beschriebene lokale
+Anwendung beantworten und die Datenschutzangaben veröffentlichen.
+Inhaltsrechte, Altersfreigabe, Preis und Länder im Portal ergänzen.
+
 Für die erste Version wird die vorbereitete Erstversionsnotiz nicht als
 „Neu in dieser Version“ benötigt. Keine zusätzlichen Features, Cloud-Dienste,
 PDF-Funktionen oder technische Mac-Freigabe aus den Texten ableiten.
@@ -65,10 +77,13 @@ weder nachgebaut noch mit nachgeahmter macOS-Fensterdekoration versehen.
 `captions.txt` enthält diese vier redaktionellen Bildtexte. Sie sind keine
 separaten Pflichtfelder in App Store Connect. Ein Vorschauvideo wurde nicht erstellt.
 
-Wie bei Knitting Projects sind dies Linux-Entwürfe. Die endgültigen Aufnahmen
-später auf dem Mac mit einem separaten Testbenutzer und dem enthaltenen
-`Demo/sewing-planner-de-DE.json` erstellen. `Screenshots-Final-Mac/de-DE`
-bleibt bis dahin leer. Die Bildentwürfe sind keine native Mac-Abnahme.
+Die Aufnahmen stammen von Linux und verwenden die eigene JavaFX-Oberfläche.
+Vor der Einreichung mit dem tatsächlich laufenden Mac-Build vergleichen und
+abweichende Ansichten auf dem Mac erneut aufnehmen. Dafür einen separaten
+Testbenutzer und `Demo/sewing-planner-de-DE.json` verwenden.
+`Screenshots-Final-Mac/de-DE` bleibt bis zum Vergleich leer. Die vorhandenen
+Texte, Illustrationen und Ansichten bleiben nutzbar. Die Bildentwürfe belegen
+keine native Mac-Funktionsprüfung.
 
 ## Datenschutz und technische Vorbereitung
 
@@ -98,9 +113,12 @@ PKG-Datei, Signierungshelfer oder Uploads.
 
 ## Ohne App-Build erneut erzeugen
 
-Benötigt werden die bereits vorhandenen geprüften App-JARs unter
-`target/app-image/Sewing Planner/lib/app`, die vorhandenen JavaFX-Module unter
+Benötigt werden die bereits geprüfte `target/naehplan-0.1.0.jar` mit ihrem
+unveränderten `target/classes`, die Abhängigkeiten unter
+`target/app-image/Sewing Planner/lib/app`, die JavaFX-Module unter
 `target/javafx-modules`, JDK 21, Python mit Pillow, Xvfb und xdotool.
+Die ältere App-JAR im App-Image wird nicht verwendet oder ersetzt. Fehlende
+oder veraltete Artefakte führen zum Abbruch, nicht zu einem automatischen Build.
 `SEWINGPLANNER_XVFB` kann auf ein vorhandenes Xvfb zeigen.
 
 ```bash

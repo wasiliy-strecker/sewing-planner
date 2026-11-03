@@ -16,6 +16,6 @@ Deine Sammlung sichern
 Exportiere alle Projekte als JSON-Datei, einschließlich Status, Farbwerten, gespeicherten Fotos und Checklisten. Beim Import bleiben vorhandene Projekte erhalten. Bereits enthaltene identische Kopien werden übersprungen. Deine Sicherungen speicherst und verwaltest du selbst.
 
 Lokal und ohne Konto
-Sewing Planner funktioniert ohne Anmeldung und ohne Internetverbindung. Deine Sammlung bleibt auf deinem Mac. Es gibt keine Werbung, kein Tracking und keine eigene Cloud-Synchronisierung. Die App verschlüsselt ihre lokalen Daten und exportierten Dateien nicht selbst.
+Die Verwaltung deiner Nähprojekte funktioniert ohne Anmeldung und ohne Internetverbindung. Deine Sammlung bleibt auf deinem Mac. Es gibt keine Werbung, kein Tracking und keine eigene Cloud-Synchronisierung. Die App verschlüsselt ihre lokalen Daten und exportierten Dateien nicht selbst. Die englische Datenschutzerklärung lässt sich über „Info“ im Browser auf GitHub öffnen. Dafür ist eine Internetverbindung erforderlich.
 
 Die Oberfläche ist auf Deutsch, Englisch, Spanisch, Französisch, Italienisch und Portugiesisch (Brasilien) verfügbar. Beim ersten Start ist Englisch eingestellt. Unter „Language“ kannst du Deutsch auswählen und die App neu starten.

@@ -15,6 +15,7 @@ import tempfile
 import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
+from zipfile import ZipFile
 
 from export_privacy import export_privacy, privacy_url
 
@@ -209,15 +210,44 @@ def existing_runtime():
     """Read existing artifacts only. Never invoke Maven or build the application."""
     app = ROOT / "target/app-image/Sewing Planner/lib/app"
     modules = ROOT / "target/javafx-modules"
-    files = sorted(app.glob("*.jar")) + sorted(modules.glob("*.jar"))
-    if len(list(app.glob("*.jar"))) != 4 or len(list(modules.glob("*.jar"))) != 3:
+    jar = ROOT / "target/naehplan-0.1.0.jar"
+    dependencies = sorted(p for p in app.glob("*.jar") if p.name != jar.name)
+    files = [jar] + dependencies + sorted(modules.glob("*.jar"))
+    if len(dependencies) != 3 or len(list(modules.glob("*.jar"))) != 3:
         raise ValueError(
-            "The existing Sewing Planner image and JavaFX modules are required"
+            "The existing Sewing Planner dependencies and JavaFX modules are required"
         )
-    jar = app / "naehplan-0.1.0.jar"
-    if not jar.is_file() or sha256(jar) != sha256(ROOT / "target/naehplan-0.1.0.jar"):
+    # The older app-image is only a dependency source. Use the verified current JAR.
+    compiled = ROOT / "target/classes"
+    if not jar.is_file() or not compiled.is_dir():
         raise ValueError(
-            "The existing application JAR must match the last verified JAR"
+            "The previously verified application JAR and classes are required"
+        )
+    with ZipFile(jar) as archive:
+        for path in compiled.rglob("*"):
+            if (
+                path.is_file()
+                and archive.read(path.relative_to(compiled).as_posix())
+                != path.read_bytes()
+            ):
+                raise ValueError(
+                    "The application JAR differs from the existing compiled output"
+                )
+        for path in (ROOT / "src/main/resources").rglob("*"):
+            if (
+                path.is_file()
+                and archive.read(
+                    path.relative_to(ROOT / "src/main/resources").as_posix()
+                )
+                != path.read_bytes()
+            ):
+                raise ValueError("The application JAR has outdated resources")
+    if any(
+        p.stat().st_mtime > jar.stat().st_mtime
+        for p in (ROOT / "src/main/java").rglob("*.java")
+    ):
+        raise ValueError(
+            "Application sources are newer than the existing JAR. No automatic build"
         )
     changed = subprocess.check_output(
         ["git", "diff", "HEAD", "--name-only", "src/main", "pom.xml"],
@@ -247,7 +277,7 @@ def capture(output):
     runtime = existing_runtime()
     javafx = [str(ROOT / path) for path in runtime if "javafx-modules/" in path]
     classpath = os.pathsep.join(
-        str(ROOT / path) for path in runtime if "lib/app/" in path
+        str(ROOT / path) for path in runtime if "javafx-modules/" not in path
     )
     write_json(
         output / "runtime-info.json", {"appBuildExecuted": False, "files": runtime}
@@ -437,10 +467,11 @@ def assemble(captures, output):
     drafts.mkdir(parents=True)
     for name in IMAGES:
         shutil.copy2(captures / name, drafts)
-    (drafts.parent / "ENTWUERFE-NICHT-HOCHLADEN.txt").write_text(
+    (drafts.parent / "AUFNAHMEN-HINWEIS.txt").write_text(
         "Echte Linux-Aufnahmen der aktuellen App mit synthetischen Daten.\n"
-        "Noch keine Mac-Aufnahmen und keine native Mac-Abnahme.\n"
-        "Die vier Ansichten auf dem späteren Mac-Build neu aufnehmen.\n",
+        "Die vier Ansichten vor Einreichung mit der tatsächlichen Mac-Oberfläche vergleichen.\n"
+        "Abweichende Ansichten auf dem Mac erneut aufnehmen.\n"
+        "Die Bilder belegen keine native Mac-Funktionsprüfung.\n",
         encoding="utf-8",
     )
     (output / "Screenshots-Final-Mac/de-DE").mkdir(parents=True)
@@ -484,7 +515,7 @@ def assemble(captures, output):
         "JETZT-IN-APP-STORE-CONNECT.md erklärt die Felder der Versionsseite.\n"
         "Store/de-DE enthält direkt kopierbare Feldtexte ohne Listenmarker.\n"
         "Screenshot-Drafts-Linux enthält vier echte Entwürfe in 2560 × 1600 RGB.\n"
-        "Die endgültigen Mac-Screenshots fehlen noch. Kein Vorschauvideo.\n"
+        "Der Vergleich mit der tatsächlichen Mac-Oberfläche ist noch offen. Kein Vorschauvideo.\n"
         "Demo enthält ausschließlich fünf erfundene Projekte mit eigenen Illustrationen.\n"
         "Privacy enthält die englische PRIVACY.md und ihre GitHub-URL.\n"
         "Persönliche Prüferkontakte müssen vor der Einreichung ergänzt werden.\n"
