@@ -16,6 +16,8 @@ import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
+from export_privacy import export_privacy, privacy_url
+
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +37,7 @@ FIELDS = (
     "description",
     "keywords",
     "support-url",
+    "privacy-url",
     "marketing-url",
     "copyright",
     "version",
@@ -61,7 +64,7 @@ def sha256(path):
 
 
 def source_files():
-    files = [ROOT / "pom.xml", ROOT / "mvnw", GUIDE]
+    files = [ROOT / "pom.xml", ROOT / "mvnw", GUIDE, ROOT / "PRIVACY.md", ROOT / "store-listings/submission/privacy-url.txt"]
     for folder in (
         "src/main",
         "scripts",
@@ -333,7 +336,6 @@ def capture(output):
     evidence = (
         *IMAGES,
         "asset-checks.json",
-        "privacy-de-DE.txt",
         "capture.log",
         "runtime-info.json",
         "content-checks.json",
@@ -381,7 +383,6 @@ def validate_capture(folder):
         )
     expected = set(IMAGES) | {
         "asset-checks.json",
-        "privacy-de-DE.txt",
         "capture.log",
         "runtime-info.json",
         "content-checks.json",
@@ -443,28 +444,7 @@ def assemble(captures, output):
         encoding="utf-8",
     )
     (output / "Screenshots-Final-Mac/de-DE").mkdir(parents=True)
-    privacy = output / "Privacy"
-    privacy.mkdir()
-    policy = (captures / "privacy-de-DE.txt").read_text(encoding="utf-8")
-    (privacy / "de-DE.txt").write_text(policy, encoding="utf-8")
-    rendered = (
-        '<!doctype html><html lang="de"><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        "<title>Datenschutz – Sewing Planner</title><style>"
-        "body{max-width:52rem;margin:3rem auto;padding:0 1rem;font:18px/1.6 system-ui}"
-        "p{white-space:pre-line}</style><main>"
-    )
-    rendered += "".join(
-        "<p>" + html.escape(part) + "</p>" for part in policy.split("\n\n")
-    )
-    (privacy / "index.html").write_text(rendered + "</main></html>\n", encoding="utf-8")
-    (privacy / "URL-NOCH-OFFEN.txt").write_text(
-        "Die vollständige Erklärung vor Einreichung öffentlich ohne Anmeldung bereitstellen.\n"
-        "Eine lokale HTML-Datei ist keine öffentliche Datenschutz-URL.\n"
-        "Beim technischen Mac-Release die Bezugskanal-Hinweise auf Apple erweitern.\n"
-        "App-Dialog und veröffentlichte Erklärung weiterhin aus derselben Quelle erzeugen.\n",
-        encoding="utf-8",
-    )
+    export_privacy(output / "Privacy")
     shutil.copy2(GUIDE, output / "JETZT-IN-APP-STORE-CONNECT.md")
     verification = output / "Verification"
     verification.mkdir()
@@ -489,7 +469,7 @@ def assemble(captures, output):
             "createdUtc": datetime.now(UTC).isoformat(),
             "scope": "Store content only",
             "screenshots": "Linux drafts",
-            "publicPrivacyURL": "pending",
+            "publicPrivacyURL": privacy_url(),
             "appBuildExecuted": False,
             "macBuild": False,
             "bundleIdRegistration": "not verified",
@@ -506,8 +486,8 @@ def assemble(captures, output):
         "Screenshot-Drafts-Linux enthält vier echte Entwürfe in 2560 × 1600 RGB.\n"
         "Die endgültigen Mac-Screenshots fehlen noch. Kein Vorschauvideo.\n"
         "Demo enthält ausschließlich fünf erfundene Projekte mit eigenen Illustrationen.\n"
-        "Privacy enthält die bestehende deutsche In-App-Erklärung als TXT und HTML.\n"
-        "Die öffentliche Datenschutz-URL und persönliche Prüferkontakte bleiben offen.\n"
+        "Privacy enthält die englische PRIVACY.md und ihre GitHub-URL.\n"
+        "Persönliche Prüferkontakte müssen vor der Einreichung ergänzt werden.\n"
         "Bundle-ID ist vorgesehen, Registrierung nicht geprüft.\n"
         "Mac-Paketierung, Bundle-Konfiguration, Signierung und Upload folgen separat.\n"
         "Die vorhandene App wurde verwendet. Kein App-Build und kein Maven-Aufruf.\n"

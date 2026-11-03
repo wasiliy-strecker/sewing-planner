@@ -3,7 +3,7 @@
 Vorbereitet für **Sewing Planner**, Store-Version **1.0**, Primärsprache Deutsch.
 Vorlage ist die Inhaltslieferung von Knitting Projects. Die Lieferung enthält
 vier Bildentwürfe, direkt kopierbare Feldtexte, synthetische Beispieldaten und
-die bestehende deutsche Datenschutzerklärung. Die App wurde dafür nicht gebaut.
+die kanonische englische Datenschutzerklärung. Die App wurde dafür nicht gebaut.
 
 Die vorgesehene neue englische Bundle-ID ist `de.appfabrik.sewingplanner`.
 Eine Registrierung dieser Kennung wurde nicht geprüft oder vorgenommen.
@@ -72,12 +72,23 @@ bleibt bis dahin leer. Die Bildentwürfe sind keine native Mac-Abnahme.
 
 ## Datenschutz und technische Vorbereitung
 
-`Privacy/de-DE.txt` und `Privacy/index.html` enthalten vollständig die bestehende
-deutsche In-App-Erklärung. Der Aufnahmehelfer exportiert dieselbe produktive
-Quelle wie der Info-Dialog. Diese Lieferung veröffentlicht die Erklärung nicht.
-Vor der Einreichung eine öffentliche Datenschutz-URL bereitstellen. Beim späteren
-Mac-Release die Bezugskanal-Hinweise auf Apple ausrichten und die Erklärung
-weiterhin aus derselben Quelle erzeugen.
+Für die lokale Anwendung ist weiterhin „Es werden keine Daten erfasst“ vorgesehen.
+Die App besitzt keine Konten, Werbung, Telemetrie oder eigene Cloud-Synchronisation.
+Der ausdrücklich angeforderte Browseraufruf überträgt keine Sammlung.
+
+Datenschutz-URL für alle Store-Sprachen:
+
+```text
+https://github.com/wasiliy-strecker/sewing-planner/blob/main/PRIVACY.md
+```
+
+Die vollständige englische Erklärung steht in `PRIVACY.md`. Neue Übergaben
+enthalten eine unveränderte Kopie und `privacy-url.txt` unter `Privacy`.
+Vor der Einreichung die URL ohne Anmeldung öffnen und den App-Namen prüfen.
+Die optionale URL für Datenschutzoptionen bleibt leer.
+
+Händlerstatus, Inhaltsrechte und Vertragszustimmungen sind persönliche rechtliche
+Erklärungen. Diese Vorbereitung trifft oder ändert sie nicht automatisch.
 
 Die aktuelle Paketierung verwendet noch die historische Kennung `de.appfabrik.naehplan`.
 Ihre Ausrichtung auf die gewählte englische Store-Kennung gehört zum späteren

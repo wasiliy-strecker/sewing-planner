@@ -7,7 +7,6 @@ import de.appfabrik.naehplan.domain.ProjectDraft;
 import de.appfabrik.naehplan.domain.ProjectStatus;
 import de.appfabrik.naehplan.i18n.AppLanguage;
 import de.appfabrik.naehplan.i18n.Messages;
-import de.appfabrik.naehplan.i18n.PrivacyNotice;
 import de.appfabrik.naehplan.persistence.JsonCollectionFile;
 import de.appfabrik.naehplan.persistence.LanguagePreferences;
 import de.appfabrik.naehplan.persistence.SqliteProjectRepository;
@@ -95,7 +94,7 @@ public final class MacStoreContentCapture {
     require(expected.equals(restored), "Imported fields, colors, statuses or photo bytes changed");
     new LanguagePreferences(data).save("de-DE");
     var messages = new Messages(AppLanguage.GERMAN);
-    Files.writeString(output.resolve("privacy-de-DE.txt"), PrivacyNotice.text(messages));
+
 
     Thread capture =
         new Thread(

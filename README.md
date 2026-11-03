@@ -262,29 +262,32 @@ Bestehende Daten, Fotos, Status und Checklisten bleiben erhalten.
 echte Bildschirmaufnahmen und geprüfte Vorschauordner ohne Lieferarchive.
 Windows-Abnahme und Veröffentlichung bleiben separat.
 
-## Datenschutz und Fokusrahmen
+## Datenschutz
 
-„Info“ → „Datenschutz“ öffnet die vollständige Datenschutzerklärung offline in der ausgewählten
-App-Sprache. Der Dialog ist scrollbar, schreibgeschützt und kopierbar.
-Escape oder „Schließen“ führen zurück. Er wird erst nach der Positionierung
-sichtbar, damit die anfängliche Korrektur der Fensterposition verborgen bleibt.
-Die Erklärung beschreibt die tatsächlich gespeicherten Texte, Fotos und die
-jeweiligen Projektfunktionen. Originalfotos werden nicht verändert.
+Die vollständige [englische Datenschutzerklärung](https://github.com/wasiliy-strecker/sewing-planner/blob/main/PRIVACY.md) liegt als
+[`PRIVACY.md`](PRIVACY.md) im eigenen GitHub-Repository. „Info“ → „Datenschutz“
+öffnet genau diese Adresse im Standardbrowser, unabhängig von der App-Sprache.
+Zum Lesen der Webseite ist eine Internetverbindung erforderlich. Die lokale
+Sammlung wird dabei nicht übertragen. Falls der Browser nicht gestartet werden
+kann, zeigt die App die Adresse zum Kopieren an.
+
+Diese eine Datei ist die gepflegte vollständige Erklärung für App und Store.
+Alle Store-Sprachen verwenden dieselbe URL. Die Menüs und Fehlermeldungen
+bleiben in den sechs vorhandenen Oberflächensprachen verfügbar.
+
+Für eine neue Übergabe den vorhandenen Elternordner und einen noch nicht
+existierenden Ausgabeordner verwenden:
+
+```bash
+python3 scripts/export_privacy.py build/privacy-handoff
+```
+
+Der Helfer kopiert `PRIVACY.md` und `privacy-url.txt` ohne App-Build oder Zugriff
+auf Nutzerdaten. Vorhandene Lieferungen werden nicht überschrieben.
 
 Löschschaltflächen erhalten einen roten Fokusrahmen. Die übrigen Schaltflächen
 behalten die jeweilige App-Farbe. Die Auswahlfläche der Tabelle bleibt sichtbar,
 der zusätzliche Rahmen der fokussierten Tabellenzeile ist transparent.
-
-Die sechs identischen Texte für Partner Center lassen sich aus den Ressourcen
-in einen neuen Ausgabeordner exportieren:
-
-```bash
-./scripts/export_privacy.sh target/privacy-texts
-```
-
-Ein vorhandener Ausgabeordner wird nicht überschrieben. Die vorhandenen
-Prüfbedingungen für Vorschau-Lieferungen bleiben bestehen. Der neue Datenschutz-
-ordner wird erst mit einer erneut geprüften Lieferung erzeugt.
 
 ## App-Icon und Ubuntu-Anwendungsmenü
 
@@ -308,11 +311,12 @@ aufrufen. Einen geöffneten Prozess anschließend regulär neu starten.
 
 ## Informationen zur App
 
-Das Menü „Info“ bietet drei getrennte Fenster. „Über die App“ zeigt den
+Das Menü „Info“ bietet drei getrennte Einträge. „Über die App“ zeigt den
 Produktnamen, die gebaute Version, eine kurze Beschreibung und den Supportkontakt.
-„Datenschutz“ zeigt die vollständige Erklärung in der gewählten Sprache.
+„Datenschutz“ öffnet die eigene englische `PRIVACY.md` auf GitHub im Browser.
 „Lizenzen“ enthält die Hinweise und Originaltexte zu den Fremdkomponenten.
-Alle Inhalte sind offline verfügbar, kopierbar und schreibgeschützt.
+App-Informationen und Lizenzen sind offline verfügbar, kopierbar und schreibgeschützt.
+Zum Lesen der Datenschutzerklärung auf GitHub ist eine Internetverbindung nötig.
 Überschriften und Erläuterungen sind in allen sechs Sprachen vorhanden.
 Rechtliche Originaltexte bleiben in ihrer Originalsprache. Weitere Hinweise
 der eingebetteten Java-Laufzeit bleiben in deren Lizenzordnern erhalten.

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import de.appfabrik.naehplan.i18n.AppLanguage;
 import de.appfabrik.naehplan.i18n.Messages;
-import de.appfabrik.naehplan.i18n.PrivacyNotice;
 import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +43,8 @@ class InfoMenuUiTest {
 
   @ParameterizedTest
   @EnumSource(AppLanguage.class)
-  void routesThreeEntriesToSeparateLocalizedReadOnlyDialogs(AppLanguage language) throws Exception {
+  void opensCanonicalPolicyAndKeepsAboutAndLicensesLocalized(AppLanguage language)
+      throws Exception {
     Messages messages = new Messages(language);
     Stage owner =
         fx(
@@ -55,10 +55,11 @@ class InfoMenuUiTest {
               stage.show();
               return stage;
             });
+    var opened = new java.util.ArrayList<java.net.URI>();
     MenuButton menu =
         fx(
             () -> {
-              MenuButton button = InfoMenu.create(owner, messages);
+              MenuButton button = InfoMenu.create(owner, messages, opened::add);
               ((StackPane) owner.getScene().getRoot()).getChildren().add(button);
               return button;
             });
@@ -74,6 +75,11 @@ class InfoMenuUiTest {
             menu.getItems().get(selected).fire();
             return null;
           });
+      if (name.equals("privacy")) {
+        assertEquals(List.of(PrivacyPolicy.URL), opened);
+        assertEquals(1, fx(() -> Window.getWindows().stream().filter(Window::isShowing).count()));
+        continue;
+      }
       await(
           () ->
               uncheckedFx(
@@ -99,13 +105,10 @@ class InfoMenuUiTest {
       String expected =
           switch (name) {
             case "about" -> AppInformation.about(messages);
-            case "privacy" -> PrivacyNotice.text(messages);
             default -> AppInformation.licenses(messages);
           };
       assertEquals(expected.replace("\r\n", "\n").replace("\r", "\n"), fx(text::getText));
-      assertEquals(
-          name.equals("privacy") ? messages.text("privacy.title") : messages.text("info." + name),
-          fx(dialog::getTitle));
+      assertEquals(messages.text("info." + name), fx(dialog::getTitle));
       String captures = System.getenv("naehplan_INFO_SCREENSHOTS");
       if (captures != null) {
         Path path = Path.of(captures, language.tag() + "-" + name + ".png");
@@ -144,5 +147,60 @@ class InfoMenuUiTest {
       await(() -> !uncheckedFx(dialog::isShowing));
       assertTrue(fx(owner::isShowing));
     }
+  }
+
+  @ParameterizedTest
+  @EnumSource(AppLanguage.class)
+  void failedBrowserLaunchShowsLocalizedCopyableAddress(AppLanguage language) throws Exception {
+    Messages messages = new Messages(language);
+    Stage owner =
+        fx(
+            () -> {
+              Stage stage = new Stage();
+              stage.setScene(new Scene(new StackPane(), 780, 660));
+              stage.show();
+              MenuButton menu =
+                  InfoMenu.create(
+                      stage,
+                      messages,
+                      uri -> {
+                        throw new java.io.IOException("Synthetic browser failure");
+                      });
+              ((StackPane) stage.getScene().getRoot()).getChildren().add(menu);
+              menu.getItems().get(1).fire();
+              return stage;
+            });
+    await(
+        () ->
+            uncheckedFx(
+                () ->
+                    Window.getWindows().stream()
+                        .anyMatch(
+                            window ->
+                                window != owner
+                                    && window.isShowing()
+                                    && window.getOpacity() == 1)));
+    TextArea text =
+        fx(
+            () ->
+                (TextArea)
+                    Window.getWindows().stream()
+                        .filter(window -> window != owner && window.isShowing())
+                        .findFirst()
+                        .orElseThrow()
+                        .getScene()
+                        .lookup("#privacy-error-text"));
+    assertNotNull(text);
+    assertFalse(fx(text::isEditable));
+    assertEquals(
+        messages.text("privacy.openError") + "\n\n" + PrivacyPolicy.URL, fx(text::getText));
+    assertEquals(
+        PrivacyPolicy.URL.toString(),
+        fx(
+            () -> {
+              int start = text.getText().lastIndexOf(PrivacyPolicy.URL.toString());
+              text.selectRange(start, text.getLength());
+              return text.getSelectedText();
+            }));
   }
 }

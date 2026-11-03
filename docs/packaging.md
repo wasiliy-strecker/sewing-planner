@@ -133,11 +133,11 @@ Vor einer öffentlichen Binärlieferung die genauen vollständigen Laufzeitquell
 und Begleitinformationen gemäß `THIRD_PARTY_NOTICES.md` zuordnen und zugänglich
 bereitstellen. Diese Vorbereitung veröffentlicht weder Pakete noch Quellen.
 
-Der Offline-Dialog enthält die Datenschutzerklärung in sechs Sprachen. Der Helfer
-`scripts/export_privacy.sh` erzeugt die gleichen Texte für die Store-Einreichung.
-Die MSIX-Anleitung erlaubt eine URL oder den direkten Datenschutztext.
-Bei der tatsächlichen Einreichung die angebotenen Felder prüfen. Die Angaben
-zur Verarbeitung müssen auch die lokal ausgewählten Fotos berücksichtigen.
+Die englische `PRIVACY.md` im Repository ist die vollständige Erklärung.
+App und alle Store-Sprachen verwenden https://github.com/wasiliy-strecker/sewing-planner/blob/main/PRIVACY.md.
+`python3 scripts/export_privacy.py neuer-ordner` kopiert sie mit ihrer URL.
+Der Browseraufruf überträgt keine Sammlung. Die Fotoverarbeitung bleibt in
+der app-eigenen Erklärung beschrieben.
 
 Quellen, erneut gelesen am 31. Oktober 2026:
 

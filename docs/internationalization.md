@@ -130,9 +130,9 @@ gehören zu späteren Releaseaufträgen. Diese Lieferung ist keine Store-Abnahme
 
 ## Datenschutzübernahme vom 31. Oktober 2026
 
-Die Info-Schaltfläche, Dialogtexte und Datenschutzerklärung stehen in allen
-sechs Sprachkatalogen. App-Dialog und Datenschutztextexport verwenden dieselben
-Ressourcen. `assemble.py` ergänzt nach den vorhandenen Prüfungen den Ordner
-`Privacy` mit sechs UTF-8-Dateien. Frühere Vorschauordner behalten ihren damaligen
+Seit dem 3. November 2026 führt „Info“ → „Datenschutz“ zur eigenen englischen
+`PRIVACY.md` auf GitHub. Menü und Browserfehlermeldung bleiben in sechs Sprachen
+verfügbar. `assemble.py` kopiert die kanonische Datei unverändert zusammen mit
+`privacy-url.txt` in den Ordner `Privacy`. Frühere Vorschauordner behalten ihren damaligen
 Quellstand. Für die aktuelle UI wurden auf Nutzerwunsch keine neuen Aufnahmen
 oder GUI-Prüfungen erzeugt. Neue Bilder und native Abnahme bleiben offen.

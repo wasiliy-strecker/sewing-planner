@@ -10,6 +10,10 @@ final class InfoMenu {
   private InfoMenu() {}
 
   static MenuButton create(Window owner, Messages messages) {
+    return create(owner, messages, BrowserOpener.system());
+  }
+
+  static MenuButton create(Window owner, Messages messages, BrowserOpener browser) {
     MenuItem about = new MenuItem(messages.text("info.about"));
     about.setId("info-about");
     about.setOnAction(
@@ -17,7 +21,17 @@ final class InfoMenu {
             show(owner, messages, "about", "info.about", () -> AppInformation.about(messages)));
     MenuItem privacy = new MenuItem(messages.text("info.privacy"));
     privacy.setId("info-privacy");
-    privacy.setOnAction(event -> new PrivacyDialog(owner, messages).show());
+    privacy.setOnAction(
+        event -> {
+          if (!PrivacyPolicy.open(browser)) {
+            show(
+                owner,
+                messages,
+                "privacy-error",
+                "info.privacy",
+                () -> messages.text("privacy.openError") + "\n\n" + PrivacyPolicy.URL);
+          }
+        });
     MenuItem licenses = new MenuItem(messages.text("info.licenses"));
     licenses.setId("info-licenses");
     licenses.setOnAction(

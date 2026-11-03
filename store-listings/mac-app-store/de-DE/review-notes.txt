@@ -10,4 +10,4 @@ Die Suche berücksichtigt die fünf Projekttextfelder und die Texte der Arbeitss
 
 „Export“ beziehungsweise „Exportieren“ sichert die gesamte Sammlung als JSON, einschließlich Projektstatus, Farben, gespeicherter Fotos und Checklistenschritten. Eine aktive Suche begrenzt den Export nicht. „Import“ beziehungsweise „Importieren“ ergänzt die Sammlung und überspringt bereits enthaltene identische Kopien.
 
-Neue Fotos werden als optimierte Kopie gespeichert. Die Originaldateien bleiben erhalten. Die App benötigt keine Internetverbindung und enthält keine Werbung, Analytics oder In-App-Käufe. Die Datenschutzerklärung ist offline unter „Info“ verfügbar.
+Neue Fotos werden als optimierte Kopie gespeichert. Die Originaldateien bleiben erhalten. Die Sammlungsverwaltung benötigt keine Internetverbindung und enthält keine Werbung, Analytics oder In-App-Käufe. „Info“ → „Datenschutz“ öffnet die englische Erklärung auf GitHub im Standardbrowser. Dafür ist eine Internetverbindung erforderlich.
