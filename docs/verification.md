@@ -561,3 +561,21 @@ Lieferung und stimmt mit README, Runtime und allen Store-URL-Feldern überein.
 Python-Syntax und Git-Whitespace sind geprüft. Bestehende Lieferordner blieben
 unverändert. Native Browseraufrufe unter Windows und macOS wurden in dieser
 Linux-Prüfung nicht ausgeführt. Es wurde kein neues Store-Paket erstellt.
+
+## Suchfilter nach Neuanlage, 4. November 2026
+
+Manueller Ablauf für die Suchkorrektur:
+
+1. Einen Suchbegriff eingeben, der keine Treffer liefert, und einen neuen Eintrag
+   mit einem anderen Namen anlegen. Erst nach erfolgreichem Speichern ist die
+   Suche leer; der neue Eintrag ist sichtbar, ausgewählt und in die Ansicht gescrollt.
+2. Dasselbe mit einer Suche wiederholen, die bereits vorhandene Treffer zeigt.
+   Nach erfolgreicher Neuanlage sind wieder alle Einträge sichtbar.
+3. Eine Neuanlage abbrechen oder eine ungültige Eingabe speichern: Der bisherige
+   Suchbegriff bleibt bestehen, bis ein Eintrag tatsächlich gespeichert wurde.
+4. Einen vorhandenen Treffer bearbeiten und speichern: Die Suche bleibt bestehen.
+   Passt der geänderte Eintrag nicht mehr zum Filter, gilt der bisherige Hinweis.
+
+Für diesen Ablauf ausschließlich erfundene Einträge beziehungsweise einen
+isolierten Testbestand verwenden. Diese Anleitung ist kein Protokoll einer
+bereits durchgeführten nativen Prüfung.
