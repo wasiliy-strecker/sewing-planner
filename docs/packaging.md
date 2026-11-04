@@ -192,3 +192,42 @@ Referenzen:
 - [Desktop Entry: Icon und StartupWMClass](https://specifications.freedesktop.org/desktop-entry/latest/recognized-keys.html)
 - [Desktop Entry: Maskierung von Exec-Argumenten](https://specifications.freedesktop.org/desktop-entry/latest/exec-variables.html)
 - [Apple: Hochauflösende App-Icons](https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html)
+
+## Paketprüfungen gegen Transporter 90255 und 90277, 4. November 2026
+
+`scripts/macos_bundle.py` prüft die Kennungen in allen enthaltenen `Info.plist`-
+Dateien einschließlich eingebetteter Bundles. Ungültige Kennungen, insbesondere
+Unterstriche, stoppen die Paketierung. Registrierte App-IDs und fremde
+Framework-Kennungen werden nicht automatisch umgeschrieben.
+
+`prepare` ergänzt ausschließlich in der erzeugten `.app`-Kopie die Leserechte
+für alle Benutzer sowie die Ausführungsrechte für Verzeichnisse und bereits
+als ausführbar markierte Dateien. Daten erhalten keine Ausführungsrechte und
+es werden keine zusätzlichen Schreibrechte vergeben. Ein bereits eingebettetes
+Provisionierungsprofil wird damit lesbar; das private Original außerhalb der
+App bleibt unverändert. Interne Framework-Symlinks bleiben erhalten, externe
+oder defekte Links werden abgewiesen. Plist-, Bibliotheks- und Signaturbytes
+bleiben unverändert.
+
+Die gezielten Skript-Prüfungen benötigen weder Maven/CMake noch ein SDK,
+Signierungszertifikate, Netzwerk oder einen App-Build:
+
+```bash
+python3 -B scripts/test_macos_bundle.py
+```
+
+Ein vorhandenes Bundle kann ohne Änderungen geprüft werden:
+
+```bash
+python3 -B scripts/macos_bundle.py inspect --app "/pfad/zur/App.app"
+```
+
+Diese Korrektur ist ausschließlich Quellcode-Vorbereitung. Native Paketprüfung,
+Distributionssignierung und Transporter-Validierung folgen beim späteren Release.
+
+`package.sh` führt `prepare` auf macOS direkt nach `jpackage --type app-image`
+aus und bricht bei Fehlern vor dem Launcher-Test und der DMG-Erzeugung ab.
+Die von jpackage erstellten Signaturdaten werden nicht umgeschrieben. Dieser
+Paketweg erzeugt weiterhin lokale App-Images/DMGs und ersetzt keine noch
+vorzubereitende Mac-App-Store-Paketierung. Er generiert keine eigene
+architekturabhängige Runtime-ID wie der Universal-Helfer von Yarn Box.

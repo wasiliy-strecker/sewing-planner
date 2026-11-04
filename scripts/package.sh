@@ -62,6 +62,8 @@ fi
 "$JAVA_HOME/bin/jpackage" "${common[@]}" --type app-image --dest "$IMAGE_DEST"
 if [[ "$(uname -s)" == Darwin ]]; then
   APP_IMAGE="$IMAGE_DEST/$APP_NAME.app"
+  # jpackage already signs this image; only modes are repaired, never plist bytes.
+  python3 "$ROOT/scripts/macos_bundle.py" prepare --app "$APP_IMAGE"
   LAUNCHER="$APP_IMAGE/Contents/MacOS/$APP_NAME"
   PLATFORM=macos
 else
